@@ -1,0 +1,511 @@
+@import "tailwindcss";
+@import "./styles/themes.css";
+
+/* Geist Font */
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Geist Mono Font */
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Map theme variables to Tailwind */
+  --color-background: var(--color-base);
+  --color-foreground: var(--color-text);
+  --color-muted: var(--color-surface-0);
+  --color-muted-foreground: var(--color-text-muted);
+  --color-border: var(--color-surface-1);
+  --color-input: var(--color-surface-0);
+  --color-ring: var(--color-accent);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-base);
+  --color-secondary: var(--color-surface-1);
+  --color-secondary-foreground: var(--color-text);
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: var(--color-base);
+  --color-accent: var(--color-accent-secondary);
+  --color-accent-foreground: var(--color-base);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-info: var(--color-info);
+
+  /* Base/Surface colors for components */
+  --color-base: var(--color-base);
+  --color-mantle: var(--color-mantle);
+  --color-crust: var(--color-crust);
+  --color-surface-0: var(--color-surface-0);
+  --color-surface-1: var(--color-surface-1);
+  --color-surface-2: var(--color-surface-2);
+  --color-overlay-0: var(--color-overlay-0);
+  --color-overlay-1: var(--color-overlay-1);
+  --color-overlay-2: var(--color-overlay-2);
+
+  /* Text colors */
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+
+  /* Catppuccin accent colors */
+  --color-lavender: #b4befe;
+  --color-blue: #89b4fa;
+  --color-sapphire: #74c7ec;
+  --color-sky: #89dceb;
+  --color-teal: #94e2d5;
+  --color-green: #a6e3a1;
+  --color-yellow: #f9e2af;
+  --color-peach: #fab387;
+  --color-maroon: #eba0ac;
+  --color-red: #f38ba8;
+  --color-mauve: #cba6f7;
+  --color-pink: #f5c2e7;
+  --color-flamingo: #f2cdcd;
+  --color-rosewater: #f5e0dc;
+
+  /* Data Type Colors */
+  --color-type-model: var(--color-type-model);
+  --color-type-clip: var(--color-type-clip);
+  --color-type-vae: var(--color-type-vae);
+  --color-type-positive: var(--color-type-positive);
+  --color-type-negative: var(--color-type-negative);
+  --color-type-conditioning: var(--color-type-conditioning);
+  --color-type-latent: var(--color-type-latent);
+  --color-type-image: var(--color-type-image);
+  --color-type-mask: var(--color-type-mask);
+  --color-type-string: var(--color-type-string);
+  --color-type-integer: var(--color-type-integer);
+  --color-type-float: var(--color-type-float);
+  --color-type-boolean: var(--color-type-boolean);
+  --color-type-bigint: var(--color-type-bigint);
+
+  /* Border Radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html,
+body {
+  margin: 0;
+  background-color: var(--color-base);
+  color: var(--color-text);
+  font-family: "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Monospace font for code, numbers, technical values */
+.font-mono,
+code,
+pre,
+kbd,
+samp,
+.tabular-nums {
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-base);
+}
+
+/* Executing node animated rainbow border with aurora glow */
+@keyframes rainbow-rotate {
+  0% {
+    --rainbow-angle: 0deg;
+  }
+  100% {
+    --rainbow-angle: 360deg;
+  }
+}
+
+@keyframes executing-aurora {
+  0%, 100% {
+    box-shadow:
+      0 0 20px 4px rgba(56, 189, 248, 0.4),
+      0 0 40px 8px rgba(139, 92, 246, 0.25);
+  }
+  33% {
+    box-shadow:
+      0 0 24px 5px rgba(139, 92, 246, 0.45),
+      0 0 48px 10px rgba(236, 72, 153, 0.28);
+  }
+  66% {
+    box-shadow:
+      0 0 22px 4px rgba(236, 72, 153, 0.42),
+      0 0 44px 8px rgba(56, 189, 248, 0.26);
+  }
+}
+
+@property --rainbow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.executing-glow {
+  position: relative;
+  animation: executing-aurora 3s ease-in-out infinite;
+}
+
+/* Rainbow border - behind the node */
+.executing-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: 14px;
+  opacity: 0.9;
+  background: conic-gradient(
+    from var(--rainbow-angle),
+    #ff0000,
+    #ff8000,
+    #ffff00,
+    #80ff00,
+    #00ff00,
+    #00ff80,
+    #00ffff,
+    #0080ff,
+    #0000ff,
+    #8000ff,
+    #ff00ff,
+    #ff0080,
+    #ff0000
+  );
+  animation: rainbow-rotate 6s linear infinite;
+}
+
+/* React Flow selection styling */
+.react-flow__selection {
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent) !important;
+  border: 1px solid var(--color-accent) !important;
+}
+
+.react-flow__nodesselection-rect {
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent) !important;
+  border: 1px solid var(--color-accent) !important;
+}
+
+/* Node content text wrapping and overflow */
+.react-flow__node input,
+.react-flow__node select,
+.react-flow__node textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.react-flow__node select {
+  text-overflow: ellipsis;
+}
+
+.react-flow__node select option {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =============================================================================
+   Custom Scrollbar - Theme Aware
+   ============================================================================= */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-overlay-0);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-overlay-1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--color-overlay-2);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Thin scrollbar variant for smaller containers */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+
+/* Hidden scrollbar but still scrollable */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-overlay-0) transparent;
+}
+
+*:hover {
+  scrollbar-color: var(--color-overlay-1) transparent;
+}
+
+/* Auto-hide scrollbar - shows on hover */
+.scrollbar-auto-hide::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.scrollbar-auto-hide:hover::-webkit-scrollbar-thumb {
+  background: var(--color-overlay-0);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.scrollbar-auto-hide:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--color-overlay-1);
+}
+
+/* =============================================================================
+   Custom Range Slider - Theme Aware
+   ============================================================================= */
+
+/* Base range input reset */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Remove default focus outline, we'll add our own */
+input[type="range"]:focus {
+  outline: none;
+}
+
+/* Webkit Track (Chrome, Safari, Edge) */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--color-surface-2);
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+
+input[type="range"]:hover::-webkit-slider-runnable-track {
+  background: var(--color-overlay-0);
+}
+
+/* Webkit Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-text);
+  border-radius: 50%;
+  margin-top: -5px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  background: var(--color-text);
+  transform: scale(1.1);
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  background: var(--color-accent);
+  transform: scale(1.15);
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+/* Firefox Track */
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--color-surface-2);
+  border-radius: 2px;
+  border: none;
+  transition: background 0.15s ease;
+}
+
+input[type="range"]:hover::-moz-range-track {
+  background: var(--color-overlay-0);
+}
+
+/* Firefox Thumb */
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-text);
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+  background: var(--color-text);
+  transform: scale(1.1);
+}
+
+input[type="range"]:active::-moz-range-thumb {
+  background: var(--color-accent);
+  transform: scale(1.15);
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+/* Firefox progress fill (the filled portion) */
+input[type="range"]::-moz-range-progress {
+  height: 4px;
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+
+/* Disabled state */
+input[type="range"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+  background: var(--color-text-muted);
+}
+
+input[type="range"]:disabled::-moz-range-thumb {
+  background: var(--color-text-muted);
+}
+
+/* =============================================================================
+   Custom Title Bar - Frameless Window
+   ============================================================================= */
+
+/* Tauri drag region */
+[data-tauri-drag-region] {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+/* Ensure buttons inside drag region are clickable */
+[data-tauri-drag-region] button {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+/* Title bar window controls */
+.titlebar-button {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Minimap styling - width matches zoom controls (4×44px + 48px = 224px) */
+.minimap-styled {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 12px !important;
+  bottom: 64px !important;
+  left: 16px !important;
+  right: auto !important;
+  width: 224px !important;
+  height: 150px !important;
+}
+
+/* Minimap inner wrapper with glassmorphism */
+.minimap-styled svg {
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Hide the black mask corners by making the mask rect have rounded corners */
+.minimap-styled .react-flow__minimap-mask {
+  rx: 12px;
+  ry: 12px;
+}

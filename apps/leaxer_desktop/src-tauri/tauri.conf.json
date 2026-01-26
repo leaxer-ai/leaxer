@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Leaxer",
+  "version": "0.1.0",
+  "identifier": "org.leaxer.ai",
+  "build": {
+    "beforeDevCommand": "",
+    "devUrl": "http://localhost:8888",
+    "beforeBuildCommand": "",
+    "frontendDist": "../../leaxer_ui/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Leaxer",
+        "width": 1400,
+        "height": 900,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "maximized": true,
+        "center": true,
+        "decorations": false,
+        "transparent": false,
+        "visible": false,
+        "backgroundColor": "#000000"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost http://localhost:* ws://localhost:* http://127.0.0.1:* ws://127.0.0.1:* http://192.168.*:* ws://192.168.*:* http://10.*:* ws://10.*:* http://172.16.*:* ws://172.16.*:* http://172.17.*:* ws://172.17.*:* http://172.18.*:* ws://172.18.*:* http://172.19.*:* ws://172.19.*:* http://172.20.*:* ws://172.20.*:* http://172.21.*:* ws://172.21.*:* http://172.22.*:* ws://172.22.*:* http://172.23.*:* ws://172.23.*:* http://172.24.*:* ws://172.24.*:* http://172.25.*:* ws://172.25.*:* http://172.26.*:* ws://172.26.*:* http://172.27.*:* ws://172.27.*:* http://172.28.*:* ws://172.28.*:* http://172.29.*:* ws://172.29.*:* http://172.30.*:* ws://172.30.*:* http://172.31.*:* ws://172.31.*:*; img-src 'self' data: blob: http://localhost:* http://127.0.0.1:* http://192.168.*:* http://10.*:* http://172.16.*:* http://172.17.*:* http://172.18.*:* http://172.19.*:* http://172.20.*:* http://172.21.*:* http://172.22.*:* http://172.23.*:* http://172.24.*:* http://172.25.*:* http://172.26.*:* http://172.27.*:* http://172.28.*:* http://172.29.*:* http://172.30.*:* http://172.31.*:*; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:",
+      "dangerousDisableAssetCspModification": true
+    }
+  },
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "targets": "all",
+    "externalBin": [],
+    "resources": [
+      "resources/leaxer_core/**/*"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    },
+    "windows": {
+      "wix": null,
+      "nsis": null
+    }
+  },
+  "plugins": {}
+}

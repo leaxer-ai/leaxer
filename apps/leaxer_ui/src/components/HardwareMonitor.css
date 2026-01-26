@@ -1,0 +1,39 @@
+/* Hardware Monitor Pill Styles */
+
+.hardware-monitor {
+  cursor: default;
+  user-select: none;
+  pointer-events: auto;
+}
+
+/* Smooth transitions */
+.hardware-monitor > div {
+  min-width: auto;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Compact view */
+.compact-view {
+  white-space: nowrap;
+}
+
+/* Expanded view */
+.expanded-view {
+  white-space: nowrap;
+}
+
+/* Animation for initial load */
+@keyframes hardware-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hardware-monitor {
+  animation: hardware-fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

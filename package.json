@@ -1,0 +1,26 @@
+{
+  "name": "leaxer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Privacy-first, local AI inference suite",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "apps/leaxer_ui",
+    "apps/leaxer_desktop",
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "node scripts/download-binaries.mjs",
+    "clean": "node scripts/clean.mjs",
+    "dev:backend": "cd apps/leaxer_core && mix phx.server",
+    "dev:frontend": "npm run dev --workspace=@leaxer/ui",
+    "dev:desktop": "npm run tauri dev --workspace=@leaxer/desktop",
+    "build:ui": "npm run build --workspace=@leaxer/ui",
+    "build:desktop": "npm run tauri build --workspace=@leaxer/desktop",
+    "lint": "npm run lint --workspace=@leaxer/ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leaxer-ai/leaxer.git"
+  }
+}

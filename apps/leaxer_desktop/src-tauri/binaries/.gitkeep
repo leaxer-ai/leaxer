@@ -1,0 +1,3 @@
+# This file keeps the binaries folder in git.
+# Actual sidecar binaries are built and placed here during the build process.
+# See scripts/build-sidecar.ps1

@@ -1,0 +1,50 @@
+/* Notification Center - Animation Keyframes */
+
+/* GPU acceleration for smooth animations */
+.notification-enter,
+.notification-exit {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Enter from top with bounce */
+@keyframes notification-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -32px, 0) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Exit: smooth bounce down, then spring up and fade out */
+@keyframes notification-exit {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  20% {
+    opacity: 1;
+    transform: translate3d(0, 6px, 0) scale(0.99);
+  }
+  40% {
+    opacity: 1;
+    transform: translate3d(0, 4px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -80px, 0) scale(0.95);
+  }
+}
+
+/* Animation classes */
+.notification-enter {
+  animation: notification-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.notification-exit {
+  animation: notification-exit 0.4s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+}

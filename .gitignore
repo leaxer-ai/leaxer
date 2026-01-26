@@ -1,0 +1,77 @@
+# Elixir / Mix
+/_build/
+/deps/
+/cover/
+/doc/ 
+/.todo/
+/tmp/
+erl_crash.dump
+*.ez
+*.beam
+.elixir_ls/
+
+# Node.js / Package Managers
+node_modules/
+.npm
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+pnpm-lock.yaml
+package-lock.json
+
+# Build Outputs
+/dist/
+/build/
+/apps/leaxer_ui/dist/
+/apps/leaxer_desktop/src-tauri/target/
+/apps/leaxer_core/priv/static/assets/
+
+# IDE and Editor
+.idea/
+.vscode/ 
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Tauri / Desktop
+/apps/leaxer_desktop/src-tauri/target/
+/apps/leaxer_desktop/src-tauri/WixTools/
+/apps/leaxer_desktop/src-tauri/Cargo.lock
+/apps/leaxer_desktop/src-tauri/gen/
+/apps/leaxer_desktop/src-tauri/resources/
+/apps/leaxer_desktop/src-tauri/binaries/*.exe
+/apps/leaxer_desktop/src-tauri/binaries/leaxer_core-*
+# Generated icons (keep only icon.png source, regenerate with `tauri icon`)
+/apps/leaxer_desktop/src-tauri/icons/*
+!/apps/leaxer_desktop/src-tauri/icons/icon.png
+
+# Binary Files and Dependencies
+# C++ binaries (platform-specific, built in CI or locally)
+/apps/leaxer_core/priv/bin/
+# Model files (should be downloaded, not version controlled)
+/apps/leaxer_core/priv/models/
+
+# Logs and Runtime Data
+*.log
+/logs/
+*.pid
+*.seed
+
+# OS and Temporary Files
+.DS_Store
+Thumbs.db
+.directory
+erl_crash.dump
+nul
+
+# Bundled tools 
+tools/ 

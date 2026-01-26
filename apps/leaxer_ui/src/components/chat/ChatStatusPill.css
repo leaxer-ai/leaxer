@@ -1,0 +1,115 @@
+/* Chat Status Pill - Siri-inspired gradient animations */
+
+/* Chat input glow when generating - uses pseudo-element to avoid layout shift */
+.chat-input-generating::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  background: linear-gradient(
+    90deg,
+    rgba(72, 219, 251, 0.3) 0%,
+    rgba(255, 159, 243, 0.25) 33%,
+    rgba(165, 94, 234, 0.25) 66%,
+    rgba(72, 219, 251, 0.3) 100%
+  );
+  background-size: 200% 100%;
+  filter: blur(60px);
+  z-index: -1;
+  pointer-events: none;
+  animation: chat-input-glow-flow 4s ease-in-out infinite;
+}
+
+@keyframes chat-input-glow-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+    filter: blur(60px) hue-rotate(0deg);
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: blur(60px) hue-rotate(30deg);
+  }
+}
+
+/* Siri-like orb with animated gradient */
+.chat-siri-orb {
+  background: linear-gradient(
+    135deg,
+    #ff6b6b 0%,
+    #feca57 20%,
+    #48dbfb 40%,
+    #ff9ff3 60%,
+    #a55eea 80%,
+    #ff6b6b 100%
+  );
+  background-size: 400% 400%;
+  animation: chat-siri-gradient 4s ease infinite;
+}
+
+/* Pulsing glow effect */
+.chat-siri-glow {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.8) 0%,
+    rgba(254, 202, 87, 0.8) 20%,
+    rgba(72, 219, 251, 0.8) 40%,
+    rgba(255, 159, 243, 0.8) 60%,
+    rgba(165, 94, 234, 0.8) 80%,
+    rgba(255, 107, 107, 0.8) 100%
+  );
+  background-size: 400% 400%;
+  animation:
+    chat-siri-gradient 4s ease infinite,
+    chat-siri-pulse 2s ease-in-out infinite;
+}
+
+/* Ambient glow behind pill */
+.chat-siri-ambient {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(72, 219, 251, 0.12) 0%,
+    rgba(255, 159, 243, 0.07) 20%,
+    rgba(165, 94, 234, 0.035) 40%,
+    transparent 60%
+  );
+  animation: chat-siri-ambient 4s ease-in-out infinite;
+}
+
+/* Keyframes */
+@keyframes chat-siri-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes chat-siri-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes chat-siri-ambient {
+  0%, 100% {
+    opacity: 0.7;
+    filter: hue-rotate(0deg);
+  }
+  33% {
+    opacity: 1;
+    filter: hue-rotate(60deg);
+  }
+  66% {
+    opacity: 0.8;
+    filter: hue-rotate(-60deg);
+  }
+}

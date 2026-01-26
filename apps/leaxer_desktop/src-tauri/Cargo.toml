@@ -1,0 +1,28 @@
+[package]
+name = "leaxer-desktop"
+version = "0.1.0"
+description = "Leaxer Desktop Application"
+authors = ["Leaxer Team"]
+license = "AGPL-3.0"
+repository = "https://github.com/leaxer-org/leaxer"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["devtools"] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-http = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dirs = "5"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

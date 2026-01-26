@@ -1,0 +1,1161 @@
+/* =============================================================================
+   Leaxer Theme System
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Root defaults for inference extension types (inherited by all themes)
+   ----------------------------------------------------------------------------- */
+:root {
+  /* Inference extension types - default colors */
+  --color-type-lora: #f472b6;       /* Pink - LoRA adapters */
+  --color-type-lora-stack: #ec4899; /* Darker pink - stacked LoRAs */
+  --color-type-controlnet: #14b8a6; /* Teal - ControlNet */
+  --color-type-photomaker: #f59e0b; /* Amber - PhotoMaker */
+  --color-type-text-encoders: #8b5cf6; /* Violet - Text encoders */
+  --color-type-sampler-settings: #6366f1; /* Indigo - Sampler settings */
+  --color-type-cache-settings: #64748b;   /* Slate - Cache settings */
+  --color-type-chroma-settings: #06b6d4;  /* Cyan - Chroma settings */
+  --color-type-llm: #10b981;        /* Emerald - LLM models */
+  --color-type-video: #ef4444;      /* Red - Video type */
+  --color-type-list-image: #0ea5e9; /* Sky - Image lists */
+}
+
+/* -----------------------------------------------------------------------------
+   Lexer Dark (Default) - Modern tech theme with blue accents
+   ----------------------------------------------------------------------------- */
+[data-theme="leaxer-dark"] {
+  /* Base - Dark with cool undertone */
+  --color-base: #131519;
+  --color-mantle: #0f1114;
+  --color-crust: #0b0c0f;
+
+  /* Surfaces - Elevated cool greys */
+  --color-surface-0: #1a1d23;
+  --color-surface-1: #23272f;
+  --color-surface-2: #2c313b;
+
+  /* Overlay/Border - Cool slate */
+  --color-overlay-0: #333a47;
+  --color-overlay-1: #444d5c;
+  --color-overlay-2: #566070;
+
+  /* Text - Clean whites */
+  --color-text: #f0f2f5;
+  --color-text-secondary: #b8bcc6;
+  --color-text-muted: #6b7280;
+
+  /* Accents - Electric cyan blue */
+  --color-accent: #38bdf8;
+  --color-accent-secondary: #0ea5e9;
+
+  /* Semantic */
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #38bdf8;
+
+  /* Data type colors - Tech palette */
+  --color-type-model: #a78bfa;      /* Purple */
+  --color-type-clip: #a78bfa;       /* Purple */
+  --color-type-vae: #f472b6;        /* Pink */
+  --color-type-positive: #4ade80;   /* Green */
+  --color-type-negative: #f87171;   /* Red */
+  --color-type-conditioning: #fb923c; /* Orange */
+  --color-type-latent: #facc15;     /* Yellow */
+  --color-type-image: #38bdf8;      /* Cyan */
+  --color-type-mask: #e2e8f0;       /* Light gray - masks are grayscale */
+  /* Detailer types */
+  --color-type-segs: #2dd4bf;       /* Teal-400 - distinct from IMAGE cyan */
+  --color-type-detector: #6366f1;   /* Indigo-500 */
+  --color-type-sam-model: #a855f7;  /* Purple-500 - distinct from detector */
+  /* Inference extension types */
+  --color-type-lora: #f472b6;       /* Pink - LoRA adapters */
+  --color-type-lora-stack: #ec4899; /* Darker pink - stacked LoRAs */
+  --color-type-controlnet: #14b8a6; /* Teal - ControlNet */
+  --color-type-photomaker: #f59e0b; /* Amber - PhotoMaker */
+  --color-type-text-encoders: #8b5cf6; /* Violet - Text encoders */
+  --color-type-sampler-settings: #6366f1; /* Indigo - Sampler settings */
+  --color-type-cache-settings: #64748b;   /* Slate - Cache settings */
+  --color-type-chroma-settings: #06b6d4;  /* Cyan - Chroma settings */
+  --color-type-llm: #10b981;        /* Emerald - LLM models */
+  --color-type-video: #ef4444;      /* Red - Video type */
+  --color-type-list-image: #0ea5e9; /* Sky - Image lists */
+  /* Special types */
+  --color-type-any: #94a3b8;        /* Slate-400 - neutral for wildcard */
+  --color-type-string: #fcd34d;     /* Amber */
+  --color-type-integer: #60a5fa;    /* Blue */
+  --color-type-float: #34d399;      /* Emerald */
+  --color-type-boolean: #fbbf24;    /* Yellow */
+  --color-type-bigint: #818cf8;     /* Indigo */
+}
+
+/* -----------------------------------------------------------------------------
+   Lexer Light - Clean modern light theme
+   ----------------------------------------------------------------------------- */
+[data-theme="leaxer-light"] {
+  /* Base - Light greys for canvas */
+  --color-base: #eef0f2;
+  --color-mantle: #e6e8eb;
+  --color-crust: #dfe1e5;
+
+  /* Surfaces - White/near-white for nodes */
+  --color-surface-0: #ffffff;
+  --color-surface-1: #f7f8f9;
+  --color-surface-2: #f0f1f3;
+
+  /* Overlay/Border */
+  --color-overlay-0: #9ca3af;
+  --color-overlay-1: #7c838f;
+  --color-overlay-2: #6b7280;
+
+  /* Text - Dark slates */
+  --color-text: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6b7280;
+
+  /* Accents - Vibrant blue */
+  --color-accent: #0284c7;
+  --color-accent-secondary: #0369a1;
+
+  /* Semantic */
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #0284c7;
+
+  /* Data type colors - Vivid for light bg */
+  --color-type-model: #7c3aed;      /* Purple */
+  --color-type-clip: #7c3aed;       /* Purple */
+  --color-type-vae: #db2777;        /* Pink */
+  --color-type-positive: #16a34a;   /* Green */
+  --color-type-negative: #dc2626;   /* Red */
+  --color-type-conditioning: #ea580c; /* Orange */
+  --color-type-latent: #ca8a04;     /* Yellow */
+  --color-type-image: #0284c7;      /* Cyan */
+  --color-type-mask: #64748b;       /* Slate-500 - masks are grayscale */
+  /* Detailer types */
+  --color-type-segs: #14b8a6;       /* Teal-500 - distinct from IMAGE cyan */
+  --color-type-detector: #4f46e5;   /* Indigo-600 */
+  --color-type-sam-model: #9333ea;  /* Purple-600 - distinct from detector */
+  /* Inference extension types */
+  --color-type-lora: #db2777;       /* Pink - LoRA adapters */
+  --color-type-lora-stack: #be185d; /* Darker pink - stacked LoRAs */
+  --color-type-controlnet: #0d9488; /* Teal - ControlNet */
+  --color-type-photomaker: #d97706; /* Amber - PhotoMaker */
+  --color-type-text-encoders: #7c3aed; /* Violet - Text encoders */
+  --color-type-sampler-settings: #4f46e5; /* Indigo - Sampler settings */
+  --color-type-cache-settings: #475569;   /* Slate - Cache settings */
+  --color-type-chroma-settings: #0891b2;  /* Cyan - Chroma settings */
+  --color-type-llm: #059669;        /* Emerald - LLM models */
+  --color-type-video: #dc2626;      /* Red - Video type */
+  --color-type-list-image: #0284c7; /* Sky - Image lists */
+  /* Special types */
+  --color-type-any: #64748b;        /* Slate-500 - neutral for wildcard */
+  --color-type-string: #b45309;     /* Amber */
+  --color-type-integer: #2563eb;    /* Blue */
+  --color-type-float: #059669;      /* Emerald */
+  --color-type-boolean: #d97706;    /* Yellow */
+  --color-type-bigint: #4f46e5;     /* Indigo */
+}
+
+/* -----------------------------------------------------------------------------
+   Catppuccin Latte (Light)
+   ----------------------------------------------------------------------------- */
+[data-theme="catppuccin-latte"] {
+  /* Base */
+  --color-base: #eff1f5;
+  --color-mantle: #e6e9ef;
+  --color-crust: #dce0e8;
+
+  /* Surfaces */
+  --color-surface-0: #ccd0da;
+  --color-surface-1: #bcc0cc;
+  --color-surface-2: #acb0be;
+
+  /* Overlay/Border */
+  --color-overlay-0: #9ca0b0;
+  --color-overlay-1: #8c8fa1;
+  --color-overlay-2: #7c7f93;
+
+  /* Text */
+  --color-text: #4c4f69;
+  --color-text-secondary: #5c5f77;
+  --color-text-muted: #6c6f85;
+
+  /* Accents */
+  --color-accent: #8839ef;
+  --color-accent-secondary: #7287fd;
+
+  /* Semantic */
+  --color-success: #40a02b;
+  --color-warning: #df8e1d;
+  --color-error: #d20f39;
+  --color-info: #1e66f5;
+
+  /* Data type colors */
+  --color-type-model: #8839ef;
+  --color-type-clip: #8839ef;
+  --color-type-vae: #ea76cb;
+  --color-type-positive: #40a02b;
+  --color-type-negative: #d20f39;
+  --color-type-conditioning: #fe640b;
+  --color-type-latent: #fe640b;
+  --color-type-image: #1e66f5;
+  --color-type-mask: #6c6f85;       /* Subtext-0 - grayscale */
+  /* Detailer types */
+  --color-type-segs: #179299;       /* Teal */
+  --color-type-detector: #7287fd;   /* Lavender/Indigo */
+  --color-type-sam-model: #dc8a78;  /* Rosewater - distinct from detector */
+  /* Inference extension types */
+  --color-type-lora: #ea76cb;       /* Pink */
+  --color-type-lora-stack: #d20f39; /* Red */
+  --color-type-controlnet: #179299; /* Teal */
+  --color-type-photomaker: #df8e1d; /* Yellow */
+  --color-type-text-encoders: #8839ef; /* Mauve */
+  --color-type-sampler-settings: #7287fd; /* Lavender */
+  --color-type-cache-settings: #6c6f85;   /* Subtext-0 */
+  --color-type-chroma-settings: #04a5e5;  /* Sky */
+  --color-type-llm: #40a02b;        /* Green */
+  --color-type-video: #d20f39;      /* Red */
+  --color-type-list-image: #1e66f5; /* Blue */
+  --color-type-any: #7c7f93;        /* Overlay-2 - neutral for wildcard */
+  --color-type-string: #5c5f77;
+  --color-type-integer: #1e66f5;
+  --color-type-float: #40a02b;
+  --color-type-boolean: #df8e1d;
+  --color-type-bigint: #7287fd;
+}
+
+/* -----------------------------------------------------------------------------
+   Catppuccin Frappe (Medium Dark)
+   ----------------------------------------------------------------------------- */
+[data-theme="catppuccin-frappe"] {
+  /* Base */
+  --color-base: #303446;
+  --color-mantle: #292c3c;
+  --color-crust: #232634;
+
+  /* Surfaces */
+  --color-surface-0: #414559;
+  --color-surface-1: #51576d;
+  --color-surface-2: #626880;
+
+  /* Overlay/Border */
+  --color-overlay-0: #737994;
+  --color-overlay-1: #838ba7;
+  --color-overlay-2: #949cbb;
+
+  /* Text */
+  --color-text: #c6d0f5;
+  --color-text-secondary: #b5bfe2;
+  --color-text-muted: #a5adce;
+
+  /* Accents */
+  --color-accent: #ca9ee6;
+  --color-accent-secondary: #babbf1;
+
+  /* Semantic */
+  --color-success: #a6d189;
+  --color-warning: #e5c890;
+  --color-error: #e78284;
+  --color-info: #8caaee;
+
+  /* Data type colors */
+  --color-type-model: #ca9ee6;
+  --color-type-clip: #ca9ee6;
+  --color-type-vae: #f4b8e4;
+  --color-type-positive: #a6d189;
+  --color-type-negative: #e78284;
+  --color-type-conditioning: #ef9f76;
+  --color-type-latent: #ef9f76;
+  --color-type-image: #8caaee;
+  --color-type-mask: #a5adce;       /* Subtext-0 - grayscale */
+  /* Detailer types */
+  --color-type-segs: #81c8be;       /* Teal */
+  --color-type-detector: #babbf1;   /* Lavender/Indigo */
+  --color-type-sam-model: #eebebe;  /* Flamingo - distinct from detector */
+  --color-type-any: #838ba7;        /* Overlay-1 - neutral for wildcard */
+  --color-type-string: #b5bfe2;
+  --color-type-integer: #8caaee;
+  --color-type-float: #a6d189;
+  --color-type-boolean: #e5c890;
+  --color-type-bigint: #babbf1;
+}
+
+/* -----------------------------------------------------------------------------
+   Catppuccin Macchiato (Darker)
+   ----------------------------------------------------------------------------- */
+[data-theme="catppuccin-macchiato"] {
+  /* Base */
+  --color-base: #24273a;
+  --color-mantle: #1e2030;
+  --color-crust: #181926;
+
+  /* Surfaces */
+  --color-surface-0: #363a4f;
+  --color-surface-1: #494d64;
+  --color-surface-2: #5b6078;
+
+  /* Overlay/Border */
+  --color-overlay-0: #6e738d;
+  --color-overlay-1: #8087a2;
+  --color-overlay-2: #939ab7;
+
+  /* Text */
+  --color-text: #cad3f5;
+  --color-text-secondary: #b8c0e0;
+  --color-text-muted: #a5adcb;
+
+  /* Accents */
+  --color-accent: #c6a0f6;
+  --color-accent-secondary: #b7bdf8;
+
+  /* Semantic */
+  --color-success: #a6da95;
+  --color-warning: #eed49f;
+  --color-error: #ed8796;
+  --color-info: #8aadf4;
+
+  /* Data type colors */
+  --color-type-model: #c6a0f6;
+  --color-type-clip: #c6a0f6;
+  --color-type-vae: #f5bde6;
+  --color-type-positive: #a6da95;
+  --color-type-negative: #ed8796;
+  --color-type-conditioning: #f5a97f;
+  --color-type-latent: #f5a97f;
+  --color-type-image: #8aadf4;
+  --color-type-mask: #a5adcb;       /* Subtext-0 - grayscale */
+  /* Detailer types */
+  --color-type-segs: #8bd5ca;       /* Teal */
+  --color-type-detector: #b7bdf8;   /* Lavender/Indigo */
+  --color-type-sam-model: #f0c6c6;  /* Flamingo - distinct from detector */
+  --color-type-any: #8087a2;        /* Overlay-1 - neutral for wildcard */
+  --color-type-string: #b8c0e0;
+  --color-type-integer: #8aadf4;
+  --color-type-float: #a6da95;
+  --color-type-boolean: #eed49f;
+  --color-type-bigint: #b7bdf8;
+}
+
+/* -----------------------------------------------------------------------------
+   Catppuccin Mocha (Darkest) - Default
+   ----------------------------------------------------------------------------- */
+[data-theme="catppuccin-mocha"] {
+  /* Base */
+  --color-base: #1e1e2e;
+  --color-mantle: #181825;
+  --color-crust: #11111b;
+
+  /* Surfaces */
+  --color-surface-0: #313244;
+  --color-surface-1: #45475a;
+  --color-surface-2: #585b70;
+
+  /* Overlay/Border */
+  --color-overlay-0: #6c7086;
+  --color-overlay-1: #7f849c;
+  --color-overlay-2: #9399b2;
+
+  /* Text */
+  --color-text: #cdd6f4;
+  --color-text-secondary: #bac2de;
+  --color-text-muted: #a6adc8;
+
+  /* Accents */
+  --color-accent: #cba6f7;
+  --color-accent-secondary: #b4befe;
+
+  /* Semantic */
+  --color-success: #a6e3a1;
+  --color-warning: #f9e2af;
+  --color-error: #f38ba8;
+  --color-info: #89b4fa;
+
+  /* Data type colors */
+  --color-type-model: #cba6f7;
+  --color-type-clip: #cba6f7;
+  --color-type-vae: #f5c2e7;
+  --color-type-positive: #a6e3a1;
+  --color-type-negative: #f38ba8;
+  --color-type-conditioning: #fab387;
+  --color-type-latent: #fab387;
+  --color-type-image: #89b4fa;
+  --color-type-mask: #a6adc8;       /* Subtext-0 - grayscale */
+  /* Detailer types */
+  --color-type-segs: #94e2d5;       /* Teal */
+  --color-type-detector: #b4befe;   /* Lavender/Indigo */
+  --color-type-sam-model: #f2cdcd;  /* Flamingo - distinct from detector */
+  --color-type-any: #7f849c;        /* Overlay-1 - neutral for wildcard */
+  --color-type-string: #bac2de;
+  --color-type-integer: #89b4fa;
+  --color-type-float: #a6e3a1;
+  --color-type-boolean: #f9e2af;
+  --color-type-bigint: #b4befe;
+}
+
+/* -----------------------------------------------------------------------------
+   Dracula
+   ----------------------------------------------------------------------------- */
+[data-theme="dracula"] {
+  /* Base */
+  --color-base: #282a36;
+  --color-mantle: #21222c;
+  --color-crust: #191a21;
+
+  /* Surfaces */
+  --color-surface-0: #343746;
+  --color-surface-1: #424450;
+  --color-surface-2: #4d4f5c;
+
+  /* Overlay/Border */
+  --color-overlay-0: #6272a4;
+  --color-overlay-1: #7082b4;
+  --color-overlay-2: #8292c4;
+
+  /* Text */
+  --color-text: #f8f8f2;
+  --color-text-secondary: #e8e8e2;
+  --color-text-muted: #6272a4;
+
+  /* Accents */
+  --color-accent: #bd93f9;
+  --color-accent-secondary: #ff79c6;
+
+  /* Semantic */
+  --color-success: #50fa7b;
+  --color-warning: #f1fa8c;
+  --color-error: #ff5555;
+  --color-info: #8be9fd;
+
+  /* Data type colors */
+  --color-type-model: #bd93f9;
+  --color-type-clip: #bd93f9;
+  --color-type-vae: #ff79c6;
+  --color-type-positive: #50fa7b;
+  --color-type-negative: #ff5555;
+  --color-type-conditioning: #ffb86c;
+  --color-type-latent: #ffb86c;
+  --color-type-image: #8be9fd;
+  --color-type-mask: #bfc2c7;       /* Comment gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #50fa7b;       /* Green - distinct from IMAGE cyan */
+  --color-type-detector: #bd93f9;   /* Purple */
+  --color-type-sam-model: #ff79c6;  /* Pink - distinct from detector */
+  --color-type-any: #6272a4;        /* Comment - neutral for wildcard */
+  --color-type-string: #f1fa8c;
+  --color-type-integer: #8be9fd;
+  --color-type-float: #50fa7b;
+  --color-type-boolean: #f1fa8c;
+  --color-type-bigint: #bd93f9;
+}
+
+/* -----------------------------------------------------------------------------
+   Gruvbox Dark
+   ----------------------------------------------------------------------------- */
+[data-theme="gruvbox"] {
+  /* Base */
+  --color-base: #282828;
+  --color-mantle: #1d2021;
+  --color-crust: #171717;
+
+  /* Surfaces */
+  --color-surface-0: #3c3836;
+  --color-surface-1: #504945;
+  --color-surface-2: #665c54;
+
+  /* Overlay/Border */
+  --color-overlay-0: #7c6f64;
+  --color-overlay-1: #928374;
+  --color-overlay-2: #a89984;
+
+  /* Text */
+  --color-text: #ebdbb2;
+  --color-text-secondary: #d5c4a1;
+  --color-text-muted: #a89984;
+
+  /* Accents */
+  --color-accent: #d3869b;
+  --color-accent-secondary: #b8bb26;
+
+  /* Semantic */
+  --color-success: #b8bb26;
+  --color-warning: #fabd2f;
+  --color-error: #fb4934;
+  --color-info: #83a598;
+
+  /* Data type colors */
+  --color-type-model: #d3869b;
+  --color-type-clip: #d3869b;
+  --color-type-vae: #d3869b;
+  --color-type-positive: #b8bb26;
+  --color-type-negative: #fb4934;
+  --color-type-conditioning: #fe8019;
+  --color-type-latent: #fe8019;
+  --color-type-image: #83a598;
+  --color-type-mask: #a89984;       /* Gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #8ec07c;       /* Aqua/Teal */
+  --color-type-detector: #458588;   /* Blue - distinct */
+  --color-type-sam-model: #d3869b;  /* Purple - distinct from detector */
+  --color-type-any: #928374;        /* Gray - neutral for wildcard */
+  --color-type-string: #fabd2f;
+  --color-type-integer: #83a598;
+  --color-type-float: #b8bb26;
+  --color-type-boolean: #fabd2f;
+  --color-type-bigint: #d3869b;
+}
+
+/* -----------------------------------------------------------------------------
+   Nord
+   ----------------------------------------------------------------------------- */
+[data-theme="nord"] {
+  /* Base */
+  --color-base: #2e3440;
+  --color-mantle: #272c36;
+  --color-crust: #21252d;
+
+  /* Surfaces */
+  --color-surface-0: #3b4252;
+  --color-surface-1: #434c5e;
+  --color-surface-2: #4c566a;
+
+  /* Overlay/Border */
+  --color-overlay-0: #616e88;
+  --color-overlay-1: #7b88a1;
+  --color-overlay-2: #8fbcbb;
+
+  /* Text */
+  --color-text: #eceff4;
+  --color-text-secondary: #e5e9f0;
+  --color-text-muted: #d8dee9;
+
+  /* Accents */
+  --color-accent: #88c0d0;
+  --color-accent-secondary: #81a1c1;
+
+  /* Semantic */
+  --color-success: #a3be8c;
+  --color-warning: #ebcb8b;
+  --color-error: #bf616a;
+  --color-info: #5e81ac;
+
+  /* Data type colors */
+  --color-type-model: #b48ead;
+  --color-type-clip: #b48ead;
+  --color-type-vae: #b48ead;
+  --color-type-positive: #a3be8c;
+  --color-type-negative: #bf616a;
+  --color-type-conditioning: #d08770;
+  --color-type-latent: #d08770;
+  --color-type-image: #5e81ac;
+  --color-type-mask: #d8dee9;       /* Snow Storm gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #8fbcbb;       /* Frost teal */
+  --color-type-detector: #81a1c1;   /* Frost blue - distinct */
+  --color-type-sam-model: #b48ead;  /* Aurora purple */
+  --color-type-any: #7b88a1;        /* Polar Night gray - neutral for wildcard */
+  --color-type-string: #ebcb8b;
+  --color-type-integer: #81a1c1;
+  --color-type-float: #a3be8c;
+  --color-type-boolean: #ebcb8b;
+  --color-type-bigint: #88c0d0;
+}
+
+/* -----------------------------------------------------------------------------
+   Tokyo Night
+   ----------------------------------------------------------------------------- */
+[data-theme="tokyo-night"] {
+  /* Base */
+  --color-base: #1a1b26;
+  --color-mantle: #16161e;
+  --color-crust: #101014;
+
+  /* Surfaces */
+  --color-surface-0: #24283b;
+  --color-surface-1: #2f3549;
+  --color-surface-2: #3b4261;
+
+  /* Overlay/Border */
+  --color-overlay-0: #565f89;
+  --color-overlay-1: #6b7394;
+  --color-overlay-2: #787c99;
+
+  /* Text */
+  --color-text: #c0caf5;
+  --color-text-secondary: #a9b1d6;
+  --color-text-muted: #565f89;
+
+  /* Accents */
+  --color-accent: #bb9af7;
+  --color-accent-secondary: #7aa2f7;
+
+  /* Semantic */
+  --color-success: #9ece6a;
+  --color-warning: #e0af68;
+  --color-error: #f7768e;
+  --color-info: #7dcfff;
+
+  /* Data type colors */
+  --color-type-model: #bb9af7;
+  --color-type-clip: #bb9af7;
+  --color-type-vae: #ff9e64;
+  --color-type-positive: #9ece6a;
+  --color-type-negative: #f7768e;
+  --color-type-conditioning: #ff9e64;
+  --color-type-latent: #ff9e64;
+  --color-type-image: #7aa2f7;
+  --color-type-mask: #a9b1d6;       /* Text gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #2ac3de;       /* Cyan/Teal */
+  --color-type-detector: #7dcfff;   /* Lighter blue - distinct from IMAGE */
+  --color-type-sam-model: #bb9af7;  /* Purple */
+  --color-type-any: #565f89;        /* Comment - neutral for wildcard */
+  --color-type-string: #e0af68;
+  --color-type-integer: #7dcfff;
+  --color-type-float: #9ece6a;
+  --color-type-boolean: #e0af68;
+  --color-type-bigint: #7aa2f7;
+}
+
+/* -----------------------------------------------------------------------------
+   Solarized Dark
+   ----------------------------------------------------------------------------- */
+[data-theme="solarized"] {
+  /* Base */
+  --color-base: #002b36;
+  --color-mantle: #00252f;
+  --color-crust: #001f27;
+
+  /* Surfaces */
+  --color-surface-0: #073642;
+  --color-surface-1: #0a4050;
+  --color-surface-2: #0d4a5c;
+
+  /* Overlay/Border */
+  --color-overlay-0: #586e75;
+  --color-overlay-1: #657b83;
+  --color-overlay-2: #839496;
+
+  /* Text */
+  --color-text: #fdf6e3;
+  --color-text-secondary: #eee8d5;
+  --color-text-muted: #93a1a1;
+
+  /* Accents */
+  --color-accent: #268bd2;
+  --color-accent-secondary: #2aa198;
+
+  /* Semantic */
+  --color-success: #859900;
+  --color-warning: #b58900;
+  --color-error: #dc322f;
+  --color-info: #268bd2;
+
+  /* Data type colors */
+  --color-type-model: #6c71c4;
+  --color-type-clip: #6c71c4;
+  --color-type-vae: #d33682;
+  --color-type-positive: #859900;
+  --color-type-negative: #dc322f;
+  --color-type-conditioning: #cb4b16;
+  --color-type-latent: #cb4b16;
+  --color-type-image: #268bd2;
+  --color-type-mask: #93a1a1;       /* Base1 gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #2aa198;       /* Cyan/Teal */
+  --color-type-detector: #6c71c4;   /* Violet */
+  --color-type-sam-model: #d33682;  /* Magenta - distinct from detector */
+  --color-type-any: #657b83;        /* Base01 - neutral for wildcard */
+  --color-type-string: #b58900;
+  --color-type-integer: #268bd2;
+  --color-type-float: #859900;
+  --color-type-boolean: #b58900;
+  --color-type-bigint: #6c71c4;
+}
+
+/* -----------------------------------------------------------------------------
+   Rosé Pine
+   ----------------------------------------------------------------------------- */
+[data-theme="rose-pine"] {
+  /* Base */
+  --color-base: #191724;
+  --color-mantle: #1f1d2e;
+  --color-crust: #16141d;
+
+  /* Surfaces */
+  --color-surface-0: #26233a;
+  --color-surface-1: #2a2740;
+  --color-surface-2: #393552;
+
+  /* Overlay/Border */
+  --color-overlay-0: #6e6a86;
+  --color-overlay-1: #908caa;
+  --color-overlay-2: #9893a5;
+
+  /* Text */
+  --color-text: #e0def4;
+  --color-text-secondary: #d0cee8;
+  --color-text-muted: #908caa;
+
+  /* Accents */
+  --color-accent: #c4a7e7;
+  --color-accent-secondary: #ebbcba;
+
+  /* Semantic */
+  --color-success: #9ccfd8;
+  --color-warning: #f6c177;
+  --color-error: #eb6f92;
+  --color-info: #31748f;
+
+  /* Data type colors */
+  --color-type-model: #c4a7e7;
+  --color-type-clip: #c4a7e7;
+  --color-type-vae: #ebbcba;
+  --color-type-positive: #9ccfd8;
+  --color-type-negative: #eb6f92;
+  --color-type-conditioning: #f6c177;
+  --color-type-latent: #f6c177;
+  --color-type-image: #31748f;
+  --color-type-mask: #908caa;       /* Muted gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #9ccfd8;       /* Foam teal */
+  --color-type-detector: #c4a7e7;   /* Iris purple */
+  --color-type-sam-model: #ebbcba;  /* Rose - distinct from detector */
+  --color-type-any: #6e6a86;        /* Muted - neutral for wildcard */
+  --color-type-string: #f6c177;
+  --color-type-integer: #31748f;
+  --color-type-float: #9ccfd8;
+  --color-type-boolean: #f6c177;
+  --color-type-bigint: #c4a7e7;
+}
+
+/* -----------------------------------------------------------------------------
+   Everforest Dark
+   ----------------------------------------------------------------------------- */
+[data-theme="everforest"] {
+  /* Base */
+  --color-base: #2d353b;
+  --color-mantle: #272e33;
+  --color-crust: #21272b;
+
+  /* Surfaces */
+  --color-surface-0: #343f44;
+  --color-surface-1: #3d484d;
+  --color-surface-2: #475258;
+
+  /* Overlay/Border */
+  --color-overlay-0: #859289;
+  --color-overlay-1: #9da9a0;
+  --color-overlay-2: #a7c080;
+
+  /* Text */
+  --color-text: #d3c6aa;
+  --color-text-secondary: #c5b899;
+  --color-text-muted: #859289;
+
+  /* Accents */
+  --color-accent: #a7c080;
+  --color-accent-secondary: #83c092;
+
+  /* Semantic */
+  --color-success: #a7c080;
+  --color-warning: #dbbc7f;
+  --color-error: #e67e80;
+  --color-info: #7fbbb3;
+
+  /* Data type colors */
+  --color-type-model: #d699b6;
+  --color-type-clip: #d699b6;
+  --color-type-vae: #d699b6;
+  --color-type-positive: #a7c080;
+  --color-type-negative: #e67e80;
+  --color-type-conditioning: #e69875;
+  --color-type-latent: #e69875;
+  --color-type-image: #7fbbb3;
+  --color-type-mask: #9da9a0;       /* Gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #83c092;       /* Aqua/Teal */
+  --color-type-detector: #7fbbb3;   /* Blue-green */
+  --color-type-sam-model: #d699b6;  /* Purple/Pink */
+  --color-type-any: #859289;        /* Gray - neutral for wildcard */
+  --color-type-string: #dbbc7f;
+  --color-type-integer: #7fbbb3;
+  --color-type-float: #a7c080;
+  --color-type-boolean: #dbbc7f;
+  --color-type-bigint: #d699b6;
+}
+
+/* -----------------------------------------------------------------------------
+   One Dark
+   ----------------------------------------------------------------------------- */
+[data-theme="one-dark"] {
+  /* Base */
+  --color-base: #282c34;
+  --color-mantle: #21252b;
+  --color-crust: #1b1f23;
+
+  /* Surfaces */
+  --color-surface-0: #2c323c;
+  --color-surface-1: #3e4451;
+  --color-surface-2: #4b5263;
+
+  /* Overlay/Border */
+  --color-overlay-0: #5c6370;
+  --color-overlay-1: #6b727f;
+  --color-overlay-2: #7f848e;
+
+  /* Text */
+  --color-text: #abb2bf;
+  --color-text-secondary: #9da5b4;
+  --color-text-muted: #5c6370;
+
+  /* Accents */
+  --color-accent: #c678dd;
+  --color-accent-secondary: #61afef;
+
+  /* Semantic */
+  --color-success: #98c379;
+  --color-warning: #e5c07b;
+  --color-error: #e06c75;
+  --color-info: #61afef;
+
+  /* Data type colors */
+  --color-type-model: #c678dd;
+  --color-type-clip: #c678dd;
+  --color-type-vae: #c678dd;
+  --color-type-positive: #98c379;
+  --color-type-negative: #e06c75;
+  --color-type-conditioning: #d19a66;
+  --color-type-latent: #d19a66;
+  --color-type-image: #61afef;
+  --color-type-mask: #abb2bf;       /* Text gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #56b6c2;       /* Cyan/Teal */
+  --color-type-detector: #c678dd;   /* Magenta/Purple */
+  --color-type-sam-model: #e06c75;  /* Red - distinct from detector */
+  --color-type-any: #5c6370;        /* Comment - neutral for wildcard */
+  --color-type-string: #e5c07b;
+  --color-type-integer: #61afef;
+  --color-type-float: #98c379;
+  --color-type-boolean: #e5c07b;
+  --color-type-bigint: #c678dd;
+}
+
+/* -----------------------------------------------------------------------------
+   Osaka Jade
+   ----------------------------------------------------------------------------- */
+[data-theme="osaka-jade"] {
+  /* Base */
+  --color-base: #1a1f1e;
+  --color-mantle: #151918;
+  --color-crust: #101312;
+
+  /* Surfaces */
+  --color-surface-0: #232928;
+  --color-surface-1: #2c3332;
+  --color-surface-2: #363e3d;
+
+  /* Overlay/Border */
+  --color-overlay-0: #4a5453;
+  --color-overlay-1: #5e6968;
+  --color-overlay-2: #728180;
+
+  /* Text */
+  --color-text: #c8d5d3;
+  --color-text-secondary: #a8b5b3;
+  --color-text-muted: #728180;
+
+  /* Accents */
+  --color-accent: #7ec9a0;
+  --color-accent-secondary: #5fb589;
+
+  /* Semantic */
+  --color-success: #7ec9a0;
+  --color-warning: #d4b074;
+  --color-error: #d47474;
+  --color-info: #74a8d4;
+
+  /* Data type colors */
+  --color-type-model: #b48ead;
+  --color-type-clip: #b48ead;
+  --color-type-vae: #c49ec0;
+  --color-type-positive: #7ec9a0;
+  --color-type-negative: #d47474;
+  --color-type-conditioning: #d4a074;
+  --color-type-latent: #d4a074;
+  --color-type-image: #74a8d4;
+  --color-type-mask: #a8b5b3;       /* Gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #5fb589;       /* Jade/Teal */
+  --color-type-detector: #b48ead;   /* Purple */
+  --color-type-sam-model: #c49ec0;  /* Pink - distinct from detector */
+  --color-type-any: #728180;        /* Muted - neutral for wildcard */
+  --color-type-string: #d4b074;
+  --color-type-integer: #74a8d4;
+  --color-type-float: #7ec9a0;
+  --color-type-boolean: #d4b074;
+  --color-type-bigint: #b48ead;
+}
+
+/* -----------------------------------------------------------------------------
+   Github Dark
+   ----------------------------------------------------------------------------- */
+[data-theme="github-dark"] {
+  /* Base */
+  --color-base: #0d1117;
+  --color-mantle: #010409;
+  --color-crust: #0d1117;
+
+  /* Surfaces */
+  --color-surface-0: #161b22;
+  --color-surface-1: #21262d;
+  --color-surface-2: #30363d;
+
+  /* Overlay/Border */
+  --color-overlay-0: #444c56;
+  --color-overlay-1: #565f6e;
+  --color-overlay-2: #6e7681;
+
+  /* Text */
+  --color-text: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #6e7681;
+
+  /* Accents */
+  --color-accent: #58a6ff;
+  --color-accent-secondary: #79c0ff;
+
+  /* Semantic */
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-error: #f85149;
+  --color-info: #58a6ff;
+
+  /* Data type colors */
+  --color-type-model: #bc8ef7;
+  --color-type-clip: #bc8ef7;
+  --color-type-vae: #f97583;
+  --color-type-positive: #3fb950;
+  --color-type-negative: #f85149;
+  --color-type-conditioning: #fb8500;
+  --color-type-latent: #fb8500;
+  --color-type-image: #58a6ff;
+  --color-type-mask: #8b949e;       /* Muted gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #56d4dd;       /* Cyan/Teal */
+  --color-type-detector: #bc8ef7;   /* Purple */
+  --color-type-sam-model: #f97583;  /* Pink/Red - distinct from detector */
+  --color-type-any: #6e7681;        /* Muted - neutral for wildcard */
+  --color-type-string: #dbab09;
+  --color-type-integer: #79c0ff;
+  --color-type-float: #56d4dd;
+  --color-type-boolean: #d29922;
+  --color-type-bigint: #bc8ef7;
+}
+
+/* -----------------------------------------------------------------------------
+   Github Light
+   ----------------------------------------------------------------------------- */
+[data-theme="github-light"] {
+  /* Base */
+  --color-base: #ffffff;
+  --color-mantle: #f6f8fa;
+  --color-crust: #eaeef2;
+
+  /* Surfaces */
+  --color-surface-0: #f6f8fa;
+  --color-surface-1: #eaeef2;
+  --color-surface-2: #d8dee4;
+
+  /* Overlay/Border */
+  --color-overlay-0: #d0d7de;
+  --color-overlay-1: #b1bac4;
+  --color-overlay-2: #8c959f;
+
+  /* Text */
+  --color-text: #24292f;
+  --color-text-secondary: #424a53;
+  --color-text-muted: #57606a;
+
+  /* Accents */
+  --color-accent: #0969da;
+  --color-accent-secondary: #033d8b;
+
+  /* Semantic */
+  --color-success: #1a7f37;
+  --color-warning: #9e6a03;
+  --color-error: #cf222e;
+  --color-info: #0969da;
+
+  /* Data type colors */
+  --color-type-model: #7d21a8;
+  --color-type-clip: #7d21a8;
+  --color-type-vae: #cb2431;
+  --color-type-positive: #1a7f37;
+  --color-type-negative: #cf222e;
+  --color-type-conditioning: #d1301a;
+  --color-type-latent: #d1301a;
+  --color-type-image: #0969da;
+  --color-type-mask: #57606a;       /* Muted gray - grayscale */
+  /* Detailer types */
+  --color-type-segs: #1a7f37;       /* Green - distinct */
+  --color-type-detector: #7d21a8;   /* Purple */
+  --color-type-sam-model: #cf222e;  /* Red - distinct from detector */
+  --color-type-any: #8c959f;        /* Muted - neutral for wildcard */
+  --color-type-string: #bf8700;
+  --color-type-integer: #0969da;
+  --color-type-float: #03737b;
+  --color-type-boolean: #9e6a03;
+  --color-type-bigint: #7d21a8;
+}
+
+/* =============================================================================
+   Design System Variables
+   ============================================================================= */
+
+:root {
+  /* Spacing Scale (based on 4px grid) */
+  --spacing-0: 0;
+  --spacing-0-5: 0.125rem;  /* 2px */
+  --spacing-1: 0.25rem;     /* 4px */
+  --spacing-1-5: 0.375rem;  /* 6px */
+  --spacing-2: 0.5rem;      /* 8px */
+  --spacing-2-5: 0.625rem;  /* 10px */
+  --spacing-3: 0.75rem;     /* 12px */
+  --spacing-3-5: 0.875rem;  /* 14px */
+  --spacing-4: 1rem;        /* 16px */
+  --spacing-5: 1.25rem;     /* 20px */
+  --spacing-6: 1.5rem;      /* 24px */
+  --spacing-7: 1.75rem;     /* 28px */
+  --spacing-8: 2rem;        /* 32px */
+  --spacing-9: 2.25rem;     /* 36px */
+  --spacing-10: 2.5rem;     /* 40px */
+  --spacing-11: 2.75rem;    /* 44px */
+  --spacing-12: 3rem;       /* 48px */
+  --spacing-14: 3.5rem;     /* 56px */
+  --spacing-16: 4rem;       /* 64px */
+  --spacing-20: 5rem;       /* 80px */
+  --spacing-24: 6rem;       /* 96px */
+  --spacing-28: 7rem;       /* 112px */
+  --spacing-32: 8rem;       /* 128px */
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Font Weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;    /* 2px */
+  --radius-default: 0.25rem; /* 4px */
+  --radius-md: 0.375rem;    /* 6px */
+  --radius-lg: 0.5rem;      /* 8px */
+  --radius-xl: 0.75rem;     /* 12px */
+  --radius-2xl: 1rem;       /* 16px */
+  --radius-3xl: 1.5rem;     /* 24px */
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-default: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-none: 0 0 #0000;
+
+  /* Glow Effects (for accents and data types) */
+  --glow-accent: 0 0 20px rgb(203 166 247 / 0.3);
+  --glow-success: 0 0 20px rgb(166 227 161 / 0.3);
+  --glow-warning: 0 0 20px rgb(249 226 175 / 0.3);
+  --glow-error: 0 0 20px rgb(243 139 168 / 0.3);
+  --glow-info: 0 0 20px rgb(137 180 250 / 0.3);
+
+  /* Animation Durations */
+  --duration-75: 75ms;
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --duration-700: 700ms;
+  --duration-1000: 1000ms;
+
+  /* Animation Timing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Transitions */
+  --transition-none: none;
+  --transition-all: all var(--duration-150) var(--ease-in-out);
+  --transition-colors: color var(--duration-150) var(--ease-in-out),
+                       background-color var(--duration-150) var(--ease-in-out),
+                       border-color var(--duration-150) var(--ease-in-out);
+  --transition-opacity: opacity var(--duration-150) var(--ease-in-out);
+  --transition-shadow: box-shadow var(--duration-150) var(--ease-in-out);
+  --transition-transform: transform var(--duration-150) var(--ease-in-out);
+
+  /* Z-Index Scale */
+  --z-auto: auto;
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-notification: 800;
+
+  /* Node Editor Specific */
+  --node-min-width: 200px;
+  --node-max-width: 400px;
+  --node-header-height: 36px;
+  --node-port-size: 12px;
+  --node-port-spacing: 8px;
+  --grid-size: 20px;
+  --grid-dot-size: 1px;
+}
