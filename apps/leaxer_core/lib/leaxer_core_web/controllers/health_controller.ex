@@ -19,7 +19,7 @@ defmodule LeaxerCoreWeb.HealthController do
     checks = %{
       pubsub: Process.whereis(LeaxerCore.PubSub) != nil,
       queue: Process.whereis(LeaxerCore.Queue) != nil,
-      node_registry: Process.whereis(LeaxerCore.Graph.NodeRegistry) != nil
+      node_registry: Process.whereis(LeaxerCore.Nodes.Registry) != nil
     }
 
     all_healthy = Enum.all?(checks, fn {_name, status} -> status end)
