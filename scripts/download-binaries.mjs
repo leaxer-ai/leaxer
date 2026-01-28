@@ -89,15 +89,19 @@ async function main() {
     } catch {}
   }
 
-  // === leaxer-llama (arch-specific + DLLs on Windows) ===
+  // === leaxer-llama (arch-specific + DLLs on Windows + dylibs on macOS) ===
   console.log("\n=== leaxer-llama ===");
   downloadRelease("leaxer-llama", VERSIONS["leaxer-llama"], `*${platform}*`, TEMP_DIR);
   if (isWindows) {
     // Also download CUDA and ggml DLLs for Windows
     downloadRelease("leaxer-llama", VERSIONS["leaxer-llama"], "*.dll", TEMP_DIR);
   }
+  if (platform.includes("darwin")) {
+    // Also download dylibs for macOS if available
+    downloadRelease("leaxer-llama", VERSIONS["leaxer-llama"], "*.dylib", TEMP_DIR);
+  }
   for (const f of readdirSync(TEMP_DIR)) {
-    if (f.includes(platform) || (isWindows && f.endsWith(".dll"))) {
+    if (f.includes(platform) || (isWindows && f.endsWith(".dll")) || f.endsWith(".dylib")) {
       const src = join(TEMP_DIR, f);
       const dest = join(BIN_DIR, f);
       renameSync(src, dest);

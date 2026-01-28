@@ -134,7 +134,17 @@ defmodule LeaxerCore.Workers.LLMServer do
   """
   def available? do
     path = server_executable_path()
-    File.exists?(path)
+    file_or_executable_exists?(path)
+  end
+
+  # Check if path exists (for bundled binaries) or is an executable in PATH
+  defp file_or_executable_exists?(path) do
+    cond do
+      File.exists?(path) -> true
+      String.contains?(path, "/") -> false
+      System.find_executable(path) != nil -> true
+      true -> false
+    end
   end
 
   @doc """
@@ -435,7 +445,15 @@ defmodule LeaxerCore.Workers.LLMServer do
   defp start_server_process(model_path, server_port, opts) do
     exe_path = server_executable_path()
 
-    if not File.exists?(exe_path) do
+    # For system binaries (no "/"), resolve full path via which
+    exe_path =
+      if String.contains?(exe_path, "/") do
+        exe_path
+      else
+        System.find_executable(exe_path) || exe_path
+      end
+
+    if not file_or_executable_exists?(exe_path) do
       Logger.warning("[llama-server:#{server_port}] Server binary not found at #{exe_path}")
       %__MODULE__{server_ready: false, starting: false, server_port: server_port}
     else
@@ -556,20 +574,51 @@ defmodule LeaxerCore.Workers.LLMServer do
     primary =
       LeaxerCore.BinaryFinder.find_arch_binary("llama-server", backend, fallback_cpu: true)
 
-    if primary do
-      primary
-    else
-      # Try alternate naming convention
-      fallback =
-        LeaxerCore.BinaryFinder.find_arch_binary("llama.cpp-server", backend, fallback_cpu: true)
+    cond do
+      primary != nil and binary_works?(primary) ->
+        primary
 
-      if fallback do
+      # Try alternate naming convention
+      (fallback =
+         LeaxerCore.BinaryFinder.find_arch_binary("llama.cpp-server", backend, fallback_cpu: true)) !=
+          nil and binary_works?(fallback) ->
         fallback
-      else
-        # Return a path that won't exist (will trigger error handling)
+
+      # Try system llama-server (e.g., installed via homebrew)
+      system_binary_available?("llama-server") ->
+        Logger.info("[llama-server] Using system llama-server binary")
+        "llama-server"
+
+      # Fall back to system llama.cpp-server
+      system_binary_available?("llama.cpp-server") ->
+        Logger.info("[llama-server] Using system llama.cpp-server binary")
+        "llama.cpp-server"
+
+      # Return a path that won't exist (will trigger error handling)
+      true ->
         LeaxerCore.BinaryFinder.arch_bin_path("llama-server", "cpu")
-      end
     end
+  end
+
+  # Check if a binary can actually run (not just exists)
+  defp binary_works?(path) do
+    case System.cmd(path, ["--help"], stderr_to_stdout: true) do
+      {_, 0} -> true
+      {_, 1} -> true  # llama-server returns 1 for --help but that's OK
+      {output, _} -> not String.contains?(output, "Library not loaded")
+    end
+  rescue
+    _ -> false
+  end
+
+  # Check if a binary is available in system PATH
+  defp system_binary_available?(name) do
+    case System.cmd("which", [name], stderr_to_stdout: true) do
+      {path, 0} when path != "" -> File.exists?(String.trim(path))
+      _ -> false
+    end
+  rescue
+    _ -> false
   end
 
   defp detect_compute_backend do
