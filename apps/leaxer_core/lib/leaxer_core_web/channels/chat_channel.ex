@@ -34,6 +34,10 @@ defmodule LeaxerCoreWeb.ChatChannel do
   def join("chat:main", _payload, socket) do
     Logger.info("[ChatChannel] Client joining chat:main")
 
+    # Subscribe to LLM server status and logs for real-time updates
+    Phoenix.PubSub.subscribe(LeaxerCore.PubSub, "llm_server:status")
+    Phoenix.PubSub.subscribe(LeaxerCore.PubSub, "llm_server:logs")
+
     # Send current model status on join (delayed to ensure socket is ready)
     Process.send_after(self(), :send_model_status, 100)
 
@@ -93,6 +97,28 @@ defmodule LeaxerCoreWeb.ChatChannel do
   # Handle push messages from the streaming task
   def handle_info({:push, event, payload}, socket) do
     push(socket, event, payload)
+    {:noreply, socket}
+  end
+
+  # Handle LLM server status broadcasts from PubSub
+  def handle_info({:llm_server_status, status}, socket) do
+    push(socket, "llm_server_status", %{status: to_string(status)})
+    {:noreply, socket}
+  end
+
+  def handle_info({:llm_server_status, status, model_or_error}, socket) do
+    payload = if status == :error do
+      %{status: to_string(status), error: model_or_error}
+    else
+      %{status: to_string(status), model: model_or_error}
+    end
+    push(socket, "llm_server_status", payload)
+    {:noreply, socket}
+  end
+
+  # Handle LLM server log broadcasts from PubSub
+  def handle_info({:llm_server_log, line}, socket) do
+    push(socket, "llm_server_log", %{line: line, timestamp: System.system_time(:millisecond)})
     {:noreply, socket}
   end
 

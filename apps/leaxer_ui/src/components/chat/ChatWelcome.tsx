@@ -1,7 +1,10 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState, useCallback } from 'react';
 import suggestionsData from '@/data/chatSuggestions.json';
 import welcomeTitlesData from '@/data/welcomeTitles.json';
 import { ChatInput } from './ChatInput';
+import { ServerStarter } from './ServerStarter';
+import { useChatStore } from '@/stores/chatStore';
+import { useChatWebSocket } from '@/hooks/useChatWebSocket';
 import type { ChatAttachment } from '@/types/chat';
 
 interface ChatWelcomeProps {
@@ -30,6 +33,33 @@ export const ChatWelcome = memo(({ onSend, onAbort, onModelLoad, disabled, isGen
   const welcomeTitle = useMemo(() => getRandomWelcomeTitle(), []);
   // Get 3 random suggestions, memoized so they don't change on re-render
   const suggestions = useMemo(() => getRandomSuggestions(3), []);
+
+  // LLM server state
+  const llmServerStatus = useChatStore((s) => s.llmServerStatus);
+  const setLlmServerStatus = useChatStore((s) => s.setLlmServerStatus);
+  const clearLlmServerLogs = useChatStore((s) => s.clearLlmServerLogs);
+  const [isStartingServer, setIsStartingServer] = useState(false);
+
+  // WebSocket for starting server
+  const { startLlmServer } = useChatWebSocket({});
+
+  // Handle starting the LLM server
+  const handleStartServer = useCallback(async (model: string) => {
+    setIsStartingServer(true);
+    clearLlmServerLogs();
+    try {
+      await startLlmServer(model);
+    } catch (err) {
+      console.error('Failed to start LLM server:', err);
+      setLlmServerStatus('error', err instanceof Error ? err.message : 'Failed to start server');
+    } finally {
+      setIsStartingServer(false);
+    }
+  }, [startLlmServer, setLlmServerStatus, clearLlmServerLogs]);
+
+  // Show ServerStarter when LLM server is idle
+  const showServerStarter = llmServerStatus === 'idle' || isStartingServer;
+
   return (
     <div className="flex flex-col items-center justify-center h-full text-center w-full max-w-2xl mx-auto px-6">
       {/* Logo */}
@@ -45,36 +75,47 @@ export const ChatWelcome = memo(({ onSend, onAbort, onModelLoad, disabled, isGen
         {welcomeTitle}
       </p>
 
-      {/* ChatInput - centered */}
+      {/* ChatInput or ServerStarter - centered */}
       <div className="w-full mb-6" style={{ overflow: 'visible' }}>
-        <ChatInput
-          onSend={onSend!}
-          onAbort={onAbort}
-          onModelLoad={onModelLoad}
-          disabled={disabled}
-          isGenerating={isGenerating}
-          autoFocus
-          focusTrigger={isVisible}
-          isEmptyChat
-        />
+        {showServerStarter ? (
+          <ServerStarter
+            onStart={handleStartServer}
+            isStarting={isStartingServer || llmServerStatus === 'loading'}
+          />
+        ) : (
+          <ChatInput
+            onSend={onSend!}
+            onAbort={onAbort}
+            onModelLoad={onModelLoad}
+            disabled={disabled}
+            isGenerating={isGenerating}
+            autoFocus
+            focusTrigger={isVisible}
+            isEmptyChat
+          />
+        )}
       </div>
 
-      {/* Suggestions */}
-      <p
-        className="text-xs mb-2"
-        style={{ color: 'var(--color-text-muted)' }}
-      >
-        Or try one of these
-      </p>
-      <div className="flex flex-wrap justify-center gap-2 w-full">
-        {suggestions.map((suggestion, index) => (
-          <SuggestionCard
-            key={index}
-            text={suggestion}
-            onClick={() => onSend?.(suggestion)}
-          />
-        ))}
-      </div>
+      {/* Suggestions - only show when server is ready */}
+      {!showServerStarter && (
+        <>
+          <p
+            className="text-xs mb-2"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            Or try one of these
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 w-full">
+            {suggestions.map((suggestion, index) => (
+              <SuggestionCard
+                key={index}
+                text={suggestion}
+                onClick={() => onSend?.(suggestion)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 });

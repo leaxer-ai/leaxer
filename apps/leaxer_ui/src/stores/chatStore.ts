@@ -56,6 +56,11 @@ interface ChatState {
   // File attach trigger (incremented to trigger file picker)
   fileAttachTrigger: number;
 
+  // LLM server state
+  llmServerStatus: 'idle' | 'loading' | 'ready' | 'error';
+  llmServerLogs: Array<{ line: string; timestamp: number }>;
+  llmServerError: string | null;
+
   // Session actions
   createSession: (name?: string) => string;
   createBranchedSession: (fromSessionId: string, name: string, userMessage: ChatMessage) => string;
@@ -113,6 +118,11 @@ interface ChatState {
   // File attach trigger
   triggerFileAttach: () => void;
 
+  // LLM server actions
+  setLlmServerStatus: (status: 'idle' | 'loading' | 'ready' | 'error', error?: string) => void;
+  addLlmServerLog: (line: string, timestamp: number) => void;
+  clearLlmServerLogs: () => void;
+
   // Settings actions
   updateSessionSettings: (sessionId: string, settings: Partial<ChatSettings>) => void;
   updateSessionModel: (sessionId: string, model: string | null) => void;
@@ -144,6 +154,9 @@ export const useChatStore = create<ChatState>()(
       chatStatus: 'idle',
       chatStatusQuery: null,
       fileAttachTrigger: 0,
+      llmServerStatus: 'idle',
+      llmServerLogs: [],
+      llmServerError: null,
 
       // Session actions
       createSession: (name?: string) => {
@@ -631,6 +644,28 @@ export const useChatStore = create<ChatState>()(
 
       triggerFileAttach: () => {
         set((state) => ({ fileAttachTrigger: state.fileAttachTrigger + 1 }));
+      },
+
+      // LLM server actions
+      setLlmServerStatus: (status, error) => {
+        set({
+          llmServerStatus: status,
+          llmServerError: error ?? null,
+        });
+        // Clear logs when server becomes ready
+        if (status === 'ready') {
+          set({ llmServerLogs: [] });
+        }
+      },
+
+      addLlmServerLog: (line, timestamp) => {
+        set((state) => ({
+          llmServerLogs: [...state.llmServerLogs.slice(-99), { line, timestamp }], // Keep last 100 lines
+        }));
+      },
+
+      clearLlmServerLogs: () => {
+        set({ llmServerLogs: [] });
       },
 
       // Settings actions

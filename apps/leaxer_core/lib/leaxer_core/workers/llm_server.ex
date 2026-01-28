@@ -388,16 +388,23 @@ defmodule LeaxerCore.Workers.LLMServer do
             String.contains?(line, "main: server is listening")
         end)
 
-    # Log each line for debugging
+    # Log each line for debugging and broadcast to subscribers
     Enum.each(lines, fn line ->
       line = String.trim(line)
-      if line != "", do: Logger.debug("[llama-server] #{line}")
+      if line != "" do
+        Logger.debug("[llama-server] #{line}")
+        # Broadcast log line to subscribers for real-time streaming
+        Phoenix.PubSub.broadcast(LeaxerCore.PubSub, "llm_server:logs", {:llm_server_log, line})
+      end
     end)
 
     # If server just became ready, process pending requests
     if server_just_ready do
       Logger.info("[llama-server] Server is ready! (detected startup message)")
       new_state = %{state | server_ready: true, starting: false}
+
+      # Broadcast status change
+      Phoenix.PubSub.broadcast(LeaxerCore.PubSub, "llm_server:status", {:llm_server_status, :ready})
 
       # Reply to all pending requests
       Enum.each(Enum.reverse(state.pending_requests), fn {from, _model, _opts} ->
@@ -412,6 +419,10 @@ defmodule LeaxerCore.Workers.LLMServer do
 
   def handle_info({_port, {:exit_status, code}}, state) do
     Logger.warning("[llama-server:#{state.server_port}] Server exited with code #{code}")
+
+    # Broadcast error status and log
+    Phoenix.PubSub.broadcast(LeaxerCore.PubSub, "llm_server:status", {:llm_server_status, :error, "Server crashed (exit code: #{code})"})
+    Phoenix.PubSub.broadcast(LeaxerCore.PubSub, "llm_server:logs", {:llm_server_log, "❌ Server exited with code #{code}"})
 
     # Reply to any pending requests with error
     Enum.each(state.pending_requests, fn {from, _model, _opts} ->
@@ -504,6 +515,9 @@ defmodule LeaxerCore.Workers.LLMServer do
 
       # Start health check timer
       Process.send_after(self(), :check_server_ready, 2_000)
+
+      # Broadcast that we're starting
+      Phoenix.PubSub.broadcast(LeaxerCore.PubSub, "llm_server:status", {:llm_server_status, :loading, model_path})
 
       %__MODULE__{
         port: port,

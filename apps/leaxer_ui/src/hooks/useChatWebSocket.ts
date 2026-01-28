@@ -55,6 +55,11 @@ interface LlmServerStatusPayload {
   error?: string;
 }
 
+interface LlmServerLogPayload {
+  line: string;
+  timestamp: number;
+}
+
 interface UseChatWebSocketOptions {
   onModelStatus?: (status: ModelStatusPayload) => void;
   onStreamChunk?: (chunk: StreamChunkPayload) => void;
@@ -64,6 +69,7 @@ interface UseChatWebSocketOptions {
   onArtifactStatus?: (status: ArtifactStatusPayload) => void;
   onArtifactChunk?: (chunk: ArtifactChunkPayload) => void;
   onLlmServerStatus?: (status: LlmServerStatusPayload) => void;
+  onLlmServerLog?: (log: LlmServerLogPayload) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
 }
@@ -78,6 +84,7 @@ export function useChatWebSocket(options: UseChatWebSocketOptions = {}) {
     onArtifactStatus,
     onArtifactChunk,
     onLlmServerStatus,
+    onLlmServerLog,
     onConnected,
     onDisconnected,
   } = options;
@@ -95,6 +102,7 @@ export function useChatWebSocket(options: UseChatWebSocketOptions = {}) {
   const onArtifactStatusRef = useRef(onArtifactStatus);
   const onArtifactChunkRef = useRef(onArtifactChunk);
   const onLlmServerStatusRef = useRef(onLlmServerStatus);
+  const onLlmServerLogRef = useRef(onLlmServerLog);
   const onConnectedRef = useRef(onConnected);
   const onDisconnectedRef = useRef(onDisconnected);
 
@@ -107,9 +115,10 @@ export function useChatWebSocket(options: UseChatWebSocketOptions = {}) {
     onArtifactStatusRef.current = onArtifactStatus;
     onArtifactChunkRef.current = onArtifactChunk;
     onLlmServerStatusRef.current = onLlmServerStatus;
+    onLlmServerLogRef.current = onLlmServerLog;
     onConnectedRef.current = onConnected;
     onDisconnectedRef.current = onDisconnected;
-  }, [onModelStatus, onStreamChunk, onGenerationComplete, onGenerationError, onToolStatus, onArtifactStatus, onArtifactChunk, onLlmServerStatus, onConnected, onDisconnected]);
+  }, [onModelStatus, onStreamChunk, onGenerationComplete, onGenerationError, onToolStatus, onArtifactStatus, onArtifactChunk, onLlmServerStatus, onLlmServerLog, onConnected, onDisconnected]);
 
   // Get the WebSocket URL from settings
   const getBackendWsUrl = useSettingsStore((s) => s.getBackendWsUrl);
@@ -233,6 +242,11 @@ export function useChatWebSocket(options: UseChatWebSocketOptions = {}) {
     channel.on('llm_server_status', (data: LlmServerStatusPayload) => {
       log.debug('Received llm_server_status:', data);
       onLlmServerStatusRef.current?.(data);
+    });
+
+    // Handle LLM server log lines (startup logs)
+    channel.on('llm_server_log', (data: LlmServerLogPayload) => {
+      onLlmServerLogRef.current?.(data);
     });
 
     return () => {
