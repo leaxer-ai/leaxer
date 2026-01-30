@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 /**
  * Download dependency binaries from GitHub releases.
- * Cross-platform Node.js script for local dev and CI/CD.
+ * Cross-platform Node.js script for local development.
+ *
+ * NOTE: For CI/CD, use the bash scripts instead:
+ *   - scripts/download-deps.sh
+ *   - scripts/build-desktop.sh
  *
  * Usage: node scripts/download-binaries.mjs
+ *
+ * Reads versions from deps.versions.json
  */
 
 import { execSync } from "child_process";
-import { existsSync, mkdirSync, renameSync, readdirSync, chmodSync } from "fs";
+import { existsSync, mkdirSync, renameSync, readdirSync, chmodSync, readFileSync } from "fs";
 import { join, basename } from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -17,15 +23,19 @@ const __dirname = dirname(__filename);
 const ROOT_DIR = dirname(__dirname);
 const BIN_DIR = join(ROOT_DIR, "apps", "leaxer_core", "priv", "bin");
 const TEMP_DIR = join(ROOT_DIR, ".tmp-bins");
+const DEPS_FILE = join(ROOT_DIR, "deps.versions.json");
 
-// Dependency versions
-const VERSIONS = {
-  "leaxer-llama": "v0.1.0",
-  "leaxer-stable-diffusion": "v0.1.0",
-  "leaxer-grounding-dino": "v0.1.0",
-  "leaxer-sam": "v0.1.0",
-  "leaxer-realesrgan": "v0.1.0",
-};
+// Read dependency versions from deps.versions.json
+function loadVersions() {
+  if (!existsSync(DEPS_FILE)) {
+    console.error(`Error: ${DEPS_FILE} not found`);
+    process.exit(1);
+  }
+  const content = readFileSync(DEPS_FILE, "utf-8");
+  return JSON.parse(content);
+}
+
+const VERSIONS = loadVersions();
 
 // Detect platform
 function detectPlatform() {

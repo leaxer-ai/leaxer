@@ -342,35 +342,54 @@ defmodule LeaxerCore.Workers.LLMServer do
       not state.starting ->
         {:noreply, state}
 
-      # Server starting - check for timeout
+      # Server starting - check HTTP endpoint as fallback detection
       true ->
         elapsed = System.monotonic_time(:millisecond) - (state.start_time || 0)
 
-        cond do
-          # Timeout - server probably crashed or stalled
-          elapsed > 120_000 ->
-            Logger.error("[llama-server] Server startup timed out after #{div(elapsed, 1000)}s")
+        # Try HTTP health check as fallback ready detection (stdout detection may fail with batch wrapper)
+        case verify_http_connectivity(state.server_port) do
+          :ok ->
+            Logger.info("[llama-server] Server is ready! (detected via HTTP health check)")
+            new_state = %{state | server_ready: true, starting: false}
 
-            # Fail all pending requests
-            Enum.each(state.pending_requests, fn {from, _model, _opts} ->
-              GenServer.reply(from, {:error, "Server startup timed out"})
-            end)
-
-            {:noreply, %{state | starting: false, pending_requests: []}}
-
-          # Still waiting - log warning if taking long
-          elapsed > 30_000 ->
-            Logger.warning(
-              "[llama-server] Server startup taking longer than expected (#{div(elapsed, 1000)}s)"
+            # Broadcast status change
+            Phoenix.PubSub.broadcast(
+              LeaxerCore.PubSub,
+              "llm_server:status",
+              {:llm_server_status, :ready}
             )
 
-            Process.send_after(self(), :check_server_ready, 5_000)
-            {:noreply, state}
+            # Reply to all pending requests
+            Enum.each(Enum.reverse(state.pending_requests), fn {from, _model, _opts} ->
+              GenServer.reply(from, :ok)
+            end)
 
-          # Normal startup - keep checking
-          true ->
-            Process.send_after(self(), :check_server_ready, 2_000)
-            {:noreply, state}
+            {:noreply, %{new_state | pending_requests: []}}
+
+          {:error, _reason} ->
+            # HTTP not ready yet, check for timeout
+            cond do
+              elapsed > 120_000 ->
+                Logger.error("[llama-server] Server startup timed out after #{div(elapsed, 1000)}s")
+
+                Enum.each(state.pending_requests, fn {from, _model, _opts} ->
+                  GenServer.reply(from, {:error, "Server startup timed out"})
+                end)
+
+                {:noreply, %{state | starting: false, pending_requests: []}}
+
+              elapsed > 30_000 ->
+                Logger.warning(
+                  "[llama-server] Server startup taking longer than expected (#{div(elapsed, 1000)}s)"
+                )
+
+                Process.send_after(self(), :check_server_ready, 5_000)
+                {:noreply, state}
+
+              true ->
+                Process.send_after(self(), :check_server_ready, 2_000)
+                {:noreply, state}
+            end
         end
     end
   end
@@ -500,53 +519,64 @@ defmodule LeaxerCore.Workers.LLMServer do
 
       Logger.info("[llama-server:#{server_port}] Starting: #{exe_path} #{Enum.join(args, " ")}")
 
-      # On Windows, we need to ensure the child process can find DLLs (CUDA, llama.dll, etc.)
-      # The DLL search order on Windows with Safe DLL Search Mode (default) is:
-      # 1. Application folder, 2. System dirs, ... 11. Current directory, 12. PATH
-      # So we MUST set PATH in the child's environment, not just cd to the directory
+      # Use NativeLauncher for proper DLL/library loading on all platforms
       bin_dir = LeaxerCore.BinaryFinder.priv_bin_dir()
-      env = build_process_env(bin_dir)
 
-      port =
-        Port.open({:spawn_executable, exe_path}, [
-          :binary,
-          :exit_status,
-          :stderr_to_stdout,
-          args: args,
-          cd: bin_dir,
-          env: env
-        ])
+      # Log detailed information before spawning (helpful for debugging DLL issues)
+      Logger.info("[llama-server:#{server_port}] bin_dir for NativeLauncher: #{bin_dir}")
+      Logger.info("[llama-server:#{server_port}] exe_path: #{exe_path}")
+      Logger.info("[llama-server:#{server_port}] exe_path exists: #{File.exists?(exe_path)}")
 
-      os_pid =
-        case Port.info(port, :os_pid) do
-          {:os_pid, pid} -> pid
-          _ -> nil
+      # On Windows, log DLL presence explicitly
+      if match?({:win32, _}, :os.type()) do
+        llama_dll = Path.join(bin_dir, "llama.dll")
+        Logger.info("[llama-server:#{server_port}] llama.dll path: #{llama_dll}")
+        Logger.info("[llama-server:#{server_port}] llama.dll exists: #{File.exists?(llama_dll)}")
+      end
+
+      {port, os_pid} =
+        case LeaxerCore.NativeLauncher.spawn_executable(exe_path, args,
+               bin_dir: bin_dir,
+               cd: bin_dir
+             ) do
+          {:ok, port, os_pid} ->
+            Logger.info("[llama-server:#{server_port}] Successfully spawned, OS PID: #{inspect(os_pid)}")
+            {port, os_pid}
+
+          {:error, reason} ->
+            Logger.error("[llama-server:#{server_port}] Failed to spawn: #{inspect(reason)}")
+            {nil, nil}
         end
 
-      # Register with ProcessTracker for orphan cleanup on crash
-      if os_pid,
-        do: LeaxerCore.Workers.ProcessTracker.register(os_pid, "llama-server", port: server_port)
+      if port == nil do
+        %__MODULE__{server_ready: false, starting: false, server_port: server_port}
+      else
+        # Register with ProcessTracker for orphan cleanup on crash
+        if os_pid,
+          do:
+            LeaxerCore.Workers.ProcessTracker.register(os_pid, "llama-server", port: server_port)
 
-      # Start health check timer
-      Process.send_after(self(), :check_server_ready, 2_000)
+        # Start health check timer
+        Process.send_after(self(), :check_server_ready, 2_000)
 
-      # Broadcast that we're starting
-      Phoenix.PubSub.broadcast(
-        LeaxerCore.PubSub,
-        "llm_server:status",
-        {:llm_server_status, :loading, model_path}
-      )
+        # Broadcast that we're starting
+        Phoenix.PubSub.broadcast(
+          LeaxerCore.PubSub,
+          "llm_server:status",
+          {:llm_server_status, :loading, model_path}
+        )
 
-      %__MODULE__{
-        port: port,
-        os_pid: os_pid,
-        current_model: model_path,
-        server_ready: false,
-        server_port: server_port,
-        starting: true,
-        pending_requests: [],
-        start_time: System.monotonic_time(:millisecond)
-      }
+        %__MODULE__{
+          port: port,
+          os_pid: os_pid,
+          current_model: model_path,
+          server_ready: false,
+          server_port: server_port,
+          starting: true,
+          pending_requests: [],
+          start_time: System.monotonic_time(:millisecond)
+        }
+      end
     end
   end
 
@@ -655,75 +685,6 @@ defmodule LeaxerCore.Workers.LLMServer do
   end
 
   defp detect_compute_backend do
-    case :os.type() do
-      {:unix, :darwin} ->
-        # macOS: use Metal on Apple Silicon
-        sys_arch = :erlang.system_info(:system_architecture) |> to_string()
-
-        if String.contains?(sys_arch, "aarch64") or String.contains?(sys_arch, "arm"),
-          do: "metal",
-          else: "cpu"
-
-      {:win32, _} ->
-        # Windows: check for NVIDIA GPU
-        if nvidia_gpu_available?(), do: "cuda", else: "cpu"
-
-      {:unix, _} ->
-        # Linux: check for NVIDIA GPU
-        if nvidia_gpu_available?(), do: "cuda", else: "cpu"
-    end
-  end
-
-  defp nvidia_gpu_available? do
-    case System.cmd("nvidia-smi", ["-L"], stderr_to_stdout: true) do
-      {output, 0} -> String.contains?(output, "GPU")
-      _ -> false
-    end
-  rescue
-    _ -> false
-  end
-
-  # Build environment variables for the child process
-  # On Windows, we need to prepend priv/bin to PATH so DLLs can be found
-  # Port.open env option expects a list of {String.t(), String.t()} tuples
-  defp build_process_env(bin_dir) do
-    case :os.type() do
-      {:win32, _} ->
-        # Get current PATH and prepend bin_dir
-        current_path = System.get_env("PATH") || ""
-        # Use native path separators for Windows
-        native_bin_dir = String.replace(bin_dir, "/", "\\")
-        new_path = "#{native_bin_dir};#{current_path}"
-
-        # Build env list with updated PATH
-        # Include other important env vars that might be needed
-        base_env = [
-          {~c"PATH", String.to_charlist(new_path)},
-          {~c"GGML_BACKEND_DIR", String.to_charlist(native_bin_dir)}
-        ]
-
-        # Add common env vars that should be inherited
-        add_if_set(base_env, "SystemRoot") ++
-          add_if_set([], "CUDA_PATH") ++
-          add_if_set([], "TEMP") ++
-          add_if_set([], "TMP")
-
-      _ ->
-        # On Unix, just set LD_LIBRARY_PATH
-        current_ld_path = System.get_env("LD_LIBRARY_PATH") || ""
-        new_ld_path = if current_ld_path == "", do: bin_dir, else: "#{bin_dir}:#{current_ld_path}"
-
-        [
-          {~c"LD_LIBRARY_PATH", String.to_charlist(new_ld_path)},
-          {~c"GGML_BACKEND_DIR", String.to_charlist(bin_dir)}
-        ]
-    end
-  end
-
-  defp add_if_set(env_list, var_name) do
-    case System.get_env(var_name) do
-      nil -> env_list
-      value -> [{String.to_charlist(var_name), String.to_charlist(value)} | env_list]
-    end
+    LeaxerCore.ComputeBackend.get_backend()
   end
 end

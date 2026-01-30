@@ -77,108 +77,20 @@ jobs:
       - uses: actions/checkout@v4
 
       # =========================================================================
-      # Download dependency binaries
+      # Download dependency binaries using unified script
       # =========================================================================
       - name: Download dependency binaries
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          set -euo pipefail
+          chmod +x scripts/*.sh
+          ./scripts/download-deps.sh --target "${{ matrix.target }}"
 
-          mkdir -p apps/leaxer_core/priv/bin
-          BIN_DIR="apps/leaxer_core/priv/bin"
-          TARGET="${{ matrix.target }}"
-          EXT="${{ matrix.ext }}"
-
-          # Read versions from deps.versions.json
-          LLAMA_VER=$(jq -r '.["leaxer-llama"]' deps.versions.json)
-          SD_VER=$(jq -r '.["leaxer-stable-diffusion"]' deps.versions.json)
-          GDINO_VER=$(jq -r '.["leaxer-grounding-dino"]' deps.versions.json)
-          SAM_VER=$(jq -r '.["leaxer-sam"]' deps.versions.json)
-          ESRGAN_VER=$(jq -r '.["leaxer-realesrgan"]' deps.versions.json)
-
-          echo "=== Dependency versions ==="
-          echo "leaxer-llama: $LLAMA_VER"
-          echo "leaxer-stable-diffusion: $SD_VER"
-          echo "leaxer-grounding-dino: $GDINO_VER"
-          echo "leaxer-sam: $SAM_VER"
-          echo "leaxer-realesrgan: $ESRGAN_VER"
-          echo ""
-
-          # Helper function to download release assets
-          download_asset() {
-            local repo=$1
-            local version=$2
-            local pattern=$3
-            local dest_name=$4
-
-            echo "Downloading $dest_name from $repo@$version..."
-
-            local tmpdir=$(mktemp -d)
-
-            if gh release download "$version" --repo "leaxer-ai/$repo" \
-                --pattern "$pattern" --dir "$tmpdir" --clobber 2>/dev/null; then
-              local downloaded=$(find "$tmpdir" -type f | head -1)
-              if [[ -n "$downloaded" ]]; then
-                cp "$downloaded" "$BIN_DIR/$dest_name"
-                chmod +x "$BIN_DIR/$dest_name" 2>/dev/null || true
-                echo "  -> $dest_name"
-              fi
-            else
-              echo "  Warning: Could not download $pattern from $repo@$version"
-            fi
-
-            rm -rf "$tmpdir"
-          }
-
-          echo "=== Downloading llama binaries ==="
-          download_asset "leaxer-llama" "$LLAMA_VER" "llama-cli-${TARGET}${EXT}" "llama-cli-${TARGET}${EXT}"
-          download_asset "leaxer-llama" "$LLAMA_VER" "llama-server-${TARGET}${EXT}" "llama-server-${TARGET}${EXT}"
-
-          # GPU variants (CUDA for Linux/Windows, Metal for macOS ARM)
-          case "$TARGET" in
-            x86_64-unknown-linux-gnu|x86_64-pc-windows-msvc)
-              download_asset "leaxer-llama" "$LLAMA_VER" "llama-cli-${TARGET}-cuda${EXT}" "llama-cli-${TARGET}-cuda${EXT}"
-              download_asset "leaxer-llama" "$LLAMA_VER" "llama-server-${TARGET}-cuda${EXT}" "llama-server-${TARGET}-cuda${EXT}"
-              ;;
-            aarch64-apple-darwin)
-              download_asset "leaxer-llama" "$LLAMA_VER" "llama-cli-${TARGET}-metal" "llama-cli-${TARGET}-metal"
-              download_asset "leaxer-llama" "$LLAMA_VER" "llama-server-${TARGET}-metal" "llama-server-${TARGET}-metal"
-              ;;
-          esac
-
-          echo ""
-          echo "=== Downloading stable-diffusion binaries ==="
-          download_asset "leaxer-stable-diffusion" "$SD_VER" "sd-${TARGET}${EXT}" "sd-${TARGET}${EXT}"
-          download_asset "leaxer-stable-diffusion" "$SD_VER" "sd-server-${TARGET}${EXT}" "sd-server-${TARGET}${EXT}"
-
-          case "$TARGET" in
-            x86_64-unknown-linux-gnu|x86_64-pc-windows-msvc)
-              download_asset "leaxer-stable-diffusion" "$SD_VER" "sd-${TARGET}-cuda${EXT}" "sd-${TARGET}-cuda${EXT}"
-              download_asset "leaxer-stable-diffusion" "$SD_VER" "sd-server-${TARGET}-cuda${EXT}" "sd-server-${TARGET}-cuda${EXT}"
-              ;;
-            aarch64-apple-darwin)
-              download_asset "leaxer-stable-diffusion" "$SD_VER" "sd-${TARGET}-metal" "sd-${TARGET}-metal"
-              download_asset "leaxer-stable-diffusion" "$SD_VER" "sd-server-${TARGET}-metal" "sd-server-${TARGET}-metal"
-              ;;
-          esac
-
-          echo ""
-          echo "=== Downloading gdino binary ==="
-          download_asset "leaxer-grounding-dino" "$GDINO_VER" "leaxer-grounding-dino-${TARGET}${EXT}" "leaxer-grounding-dino${EXT}"
-
-          echo ""
-          echo "=== Downloading sam binary ==="
-          download_asset "leaxer-sam" "$SAM_VER" "leaxer-sam-${TARGET}${EXT}" "leaxer-sam${EXT}"
-
-          echo ""
-          echo "=== Downloading realesrgan binary ==="
-          download_asset "leaxer-realesrgan" "$ESRGAN_VER" "realesrgan-ncnn-vulkan-${TARGET}${EXT}" "realesrgan-ncnn-vulkan${EXT}"
-
-          echo ""
-          echo "=== Downloaded binaries ==="
-          ls -la "$BIN_DIR/" || true
+      - name: Verify downloaded dependencies
+        shell: bash
+        run: |
+          ./scripts/verify-bundle.sh --target "${{ matrix.target }}" --dir apps/leaxer_core/priv/bin
 
       # =========================================================================
       # Build Elixir release
@@ -224,6 +136,11 @@ jobs:
           echo ""
           echo "=== Bundled binaries ==="
           ls -la apps/leaxer_desktop/src-tauri/resources/leaxer_core/lib/leaxer_core-*/priv/bin/ || echo "No binaries in release"
+
+      - name: Verify Tauri bundle
+        shell: bash
+        run: |
+          ./scripts/verify-bundle.sh --target "${{ matrix.target }}" --tauri
 
       # =========================================================================
       # Build frontend

@@ -36,6 +36,8 @@ defmodule LeaxerCore.BinaryFinder do
 
   """
 
+  require Logger
+
   @doc """
   Get the path to a simple binary in priv/bin/, with Windows .exe handling.
 
@@ -199,6 +201,9 @@ defmodule LeaxerCore.BinaryFinder do
   @doc """
   Get the priv/bin directory path.
 
+  In dev mode on Windows, returns the source priv/bin path to avoid DLL sync issues.
+  The _build directory gets cleaned during recompiles, losing the DLLs.
+
   ## Examples
 
       iex> BinaryFinder.priv_bin_dir()
@@ -206,7 +211,79 @@ defmodule LeaxerCore.BinaryFinder do
   """
   @spec priv_bin_dir() :: String.t()
   def priv_bin_dir do
-    Path.join(Application.app_dir(:leaxer_core, "priv"), "bin")
+    build_priv = Path.join(Application.app_dir(:leaxer_core, "priv"), "bin")
+
+    Logger.debug("[BinaryFinder] build_priv (Application.app_dir): #{build_priv}")
+
+    path =
+      # On Windows in dev mode, use source priv/bin to avoid DLL sync issues
+      # In releases, Mix is not available, so we check for it safely
+      case {mix_env_safe(), :os.type()} do
+        {:dev, {:win32, _}} ->
+          source_priv = source_priv_bin_dir()
+          Logger.debug("[BinaryFinder] dev mode on Windows, source_priv: #{source_priv}")
+          # Use source if it has DLLs, otherwise fall back to build
+          if File.exists?(Path.join(source_priv, "llama.dll")) do
+            Logger.debug("[BinaryFinder] Using source_priv (llama.dll found)")
+            source_priv
+          else
+            Logger.debug("[BinaryFinder] Falling back to build_priv (no llama.dll in source)")
+            build_priv
+          end
+
+        _ ->
+          build_priv
+      end
+
+    # Convert to native path format (backslashes on Windows)
+    native_path = to_native_path(path)
+
+    # Diagnostic logging for debugging DLL loading issues
+    llama_dll_path = Path.join(path, "llama.dll")
+    llama_dll_exists = File.exists?(llama_dll_path)
+
+    Logger.info("[BinaryFinder] priv_bin_dir resolved to: #{native_path}")
+    Logger.info("[BinaryFinder] llama.dll exists at #{llama_dll_path}: #{llama_dll_exists}")
+
+    # Log directory contents for additional debugging on Windows
+    if match?({:win32, _}, :os.type()) do
+      case File.ls(path) do
+        {:ok, files} ->
+          dll_files = Enum.filter(files, &String.ends_with?(&1, ".dll"))
+          Logger.info("[BinaryFinder] DLLs in priv_bin_dir: #{inspect(dll_files)}")
+
+        {:error, reason} ->
+          Logger.error("[BinaryFinder] Cannot list priv_bin_dir: #{inspect(reason)}")
+      end
+    end
+
+    native_path
+  end
+
+  # Safely get Mix.env(), returning :prod if Mix is not available (in releases)
+  defp mix_env_safe do
+    if Code.ensure_loaded?(Mix) and function_exported?(Mix, :env, 0) do
+      Mix.env()
+    else
+      :prod
+    end
+  end
+
+  @doc """
+  Get the source priv/bin directory path (not _build).
+  """
+  @spec source_priv_bin_dir() :: String.t()
+  def source_priv_bin_dir do
+    # Navigate from this file to priv/bin
+    Path.join([__DIR__, "..", "..", "priv", "bin"]) |> Path.expand() |> to_native_path()
+  end
+
+  # Convert path to native format (backslashes on Windows)
+  defp to_native_path(path) do
+    case :os.type() do
+      {:win32, _} -> String.replace(path, "/", "\\")
+      _ -> path
+    end
   end
 
   @doc """
@@ -254,6 +331,7 @@ defmodule LeaxerCore.BinaryFinder do
       {:win32, _} ->
         case compute_backend do
           "cuda" -> "x86_64-pc-windows-msvc-cuda.exe"
+          "directml" -> "x86_64-pc-windows-msvc-directml.exe"
           _ -> "x86_64-pc-windows-msvc.exe"
         end
     end
