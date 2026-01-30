@@ -55,7 +55,7 @@ defmodule LeaxerCore.BinaryFinder do
   @spec priv_bin_path(String.t()) :: String.t()
   def priv_bin_path(binary_name) do
     base = Path.join([priv_bin_dir(), binary_name])
-    add_windows_extension(base)
+    add_windows_extension(base) |> to_native_path()
   end
 
   @doc """
@@ -80,7 +80,7 @@ defmodule LeaxerCore.BinaryFinder do
   @spec arch_bin_path(String.t(), String.t()) :: String.t()
   def arch_bin_path(binary_name, compute_backend \\ "cpu") do
     arch = detect_arch(compute_backend)
-    Path.join([priv_bin_dir(), "#{binary_name}-#{arch}"])
+    Path.join([priv_bin_dir(), "#{binary_name}-#{arch}"]) |> to_native_path()
   end
 
   @doc """
