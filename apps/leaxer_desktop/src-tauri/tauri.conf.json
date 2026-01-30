@@ -42,7 +42,7 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "targets": ["deb", "appimage", "dmg", "nsis"],
+    "targets": ["deb", "dmg", "nsis"],
     "externalBin": [],
     "resources": [
       "resources/leaxer_core/**/*"

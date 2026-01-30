@@ -238,7 +238,6 @@ jobs:
         with:
           files: |
             apps/leaxer_desktop/src-tauri/target/release/bundle/deb/*.deb
-            apps/leaxer_desktop/src-tauri/target/release/bundle/appimage/*.AppImage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
