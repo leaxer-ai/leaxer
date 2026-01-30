@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Math.FloorTest do
     end
 
     test "returns correct category" do
-      assert Floor.category() == "Math"
+      assert Floor.category() == "Math/Rounding"
     end
 
     test "returns correct description" do

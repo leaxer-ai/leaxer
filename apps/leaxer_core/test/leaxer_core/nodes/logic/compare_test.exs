@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Logic.CompareTest do
     end
 
     test "returns correct category" do
-      assert Compare.category() == "Logic"
+      assert Compare.category() == "Logic/Flow"
     end
 
     test "returns correct description" do

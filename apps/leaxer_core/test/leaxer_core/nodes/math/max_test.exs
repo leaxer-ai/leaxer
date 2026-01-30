@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Math.MaxTest do
     end
 
     test "returns correct category" do
-      assert Max.category() == "Math"
+      assert Max.category() == "Math/Range"
     end
 
     test "returns correct description" do

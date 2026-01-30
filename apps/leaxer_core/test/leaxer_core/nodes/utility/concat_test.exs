@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Utility.ConcatTest do
     end
 
     test "returns correct category" do
-      assert Concat.category() == "Text"
+      assert Concat.category() == "Text/Manipulation"
     end
 
     test "returns correct description" do

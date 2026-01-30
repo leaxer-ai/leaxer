@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Logic.NotTest do
     end
 
     test "returns correct category" do
-      assert Not.category() == "Logic"
+      assert Not.category() == "Logic/Boolean"
     end
 
     test "returns correct description" do

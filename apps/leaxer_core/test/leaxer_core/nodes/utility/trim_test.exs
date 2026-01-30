@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Utility.TrimTest do
     end
 
     test "returns correct category" do
-      assert Trim.category() == "Text"
+      assert Trim.category() == "Text/Manipulation"
     end
 
     test "returns correct description" do

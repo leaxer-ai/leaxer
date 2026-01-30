@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Math.MinTest do
     end
 
     test "returns correct category" do
-      assert Min.category() == "Math"
+      assert Min.category() == "Math/Range"
     end
 
     test "returns correct description" do

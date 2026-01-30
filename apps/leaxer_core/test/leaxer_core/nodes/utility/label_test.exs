@@ -17,7 +17,7 @@ defmodule LeaxerCore.Nodes.Utility.LabelTest do
 
   describe "category/0" do
     test "returns correct category" do
-      assert Label.category() == "Utility"
+      assert Label.category() == "Utility/Display"
     end
   end
 

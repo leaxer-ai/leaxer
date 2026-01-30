@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Math.RoundTest do
     end
 
     test "returns correct category" do
-      assert Round.category() == "Math"
+      assert Round.category() == "Math/Rounding"
     end
 
     test "returns correct description" do

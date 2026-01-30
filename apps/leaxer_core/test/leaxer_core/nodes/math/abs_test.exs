@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Math.AbsTest do
     end
 
     test "returns correct category" do
-      assert Abs.category() == "Math"
+      assert Abs.category() == "Math/Range"
     end
 
     test "returns correct description" do

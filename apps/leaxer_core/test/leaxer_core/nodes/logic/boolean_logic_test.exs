@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Logic.BooleanLogicTest do
     end
 
     test "returns correct category" do
-      assert BooleanLogic.category() == "Logic"
+      assert BooleanLogic.category() == "Logic/Boolean"
     end
 
     test "returns correct description" do

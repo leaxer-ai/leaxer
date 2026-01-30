@@ -17,7 +17,7 @@ defmodule LeaxerCore.Nodes.Utility.NoteTest do
 
   describe "category/0" do
     test "returns correct category" do
-      assert Note.category() == "Utility"
+      assert Note.category() == "Utility/Display"
     end
   end
 

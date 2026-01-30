@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Logic.AndTest do
     end
 
     test "returns correct category" do
-      assert And.category() == "Logic"
+      assert And.category() == "Logic/Boolean"
     end
 
     test "returns correct description" do

@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Logic.OrTest do
     end
 
     test "returns correct category" do
-      assert Or.category() == "Logic"
+      assert Or.category() == "Logic/Boolean"
     end
 
     test "returns correct description" do

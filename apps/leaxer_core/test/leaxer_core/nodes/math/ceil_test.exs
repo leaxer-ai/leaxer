@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Math.CeilTest do
     end
 
     test "returns correct category" do
-      assert Ceil.category() == "Math"
+      assert Ceil.category() == "Math/Rounding"
     end
 
     test "returns correct description" do

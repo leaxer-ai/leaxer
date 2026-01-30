@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Utility.ContainsTest do
     end
 
     test "returns correct category" do
-      assert Contains.category() == "Text"
+      assert Contains.category() == "Text/Regex"
     end
 
     test "returns correct description" do

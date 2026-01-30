@@ -13,7 +13,7 @@ defmodule LeaxerCore.Nodes.Utility.SubstringTest do
     end
 
     test "returns correct category" do
-      assert Substring.category() == "Text"
+      assert Substring.category() == "Text/Manipulation"
     end
 
     test "returns correct description" do
