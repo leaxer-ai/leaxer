@@ -131,11 +131,15 @@ jobs:
           # Ensure resources directory exists (gitignored, so not in repo)
           mkdir -p apps/leaxer_desktop/src-tauri/resources
 
-          # Remove old resources (if any)
+          # Remove old resources completely (may exist from cache)
           rm -rf apps/leaxer_desktop/src-tauri/resources/leaxer_core
 
-          # Copy fresh release
-          cp -r _build/prod/rel/leaxer_core apps/leaxer_desktop/src-tauri/resources/
+          # Copy fresh release (use rsync on unix for reliability, cp on Windows)
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            cp -rf _build/prod/rel/leaxer_core apps/leaxer_desktop/src-tauri/resources/
+          else
+            rsync -a _build/prod/rel/leaxer_core/ apps/leaxer_desktop/src-tauri/resources/leaxer_core/
+          fi
 
           echo "=== Elixir release contents ==="
           ls -la apps/leaxer_desktop/src-tauri/resources/leaxer_core/
@@ -191,6 +195,10 @@ jobs:
       - name: Install Tauri CLI
         working-directory: apps/leaxer_desktop
         run: npm ci
+
+      - name: Generate Tauri icons
+        working-directory: apps/leaxer_desktop
+        run: npx tauri icon src-tauri/icons/icon.png
 
       - name: Build Tauri App
         working-directory: apps/leaxer_desktop
