@@ -128,6 +128,9 @@ jobs:
       - name: Copy Elixir release to Tauri resources
         shell: bash
         run: |
+          # Ensure resources directory exists (gitignored, so not in repo)
+          mkdir -p apps/leaxer_desktop/src-tauri/resources
+
           # Remove old resources (if any)
           rm -rf apps/leaxer_desktop/src-tauri/resources/leaxer_core
 
